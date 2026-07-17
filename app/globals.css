@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Design tokens — dark, cinematic, liquid glass
+   ============================================================ */
+@theme inline {
+  /* Surfaces — warm near-black */
+  --color-bg: #14100b;
+  --color-bg-elev: #1e1810;
+  --color-fg: #ede4d3;
+  --color-fg-muted: #b3a88f;
+  --color-fg-faint: #857a63;
+
+  /* Accents — molten amber & burnt sienna */
+  --color-accent: #e8a73c;        /* molten amber / gold */
+  --color-accent-2: #c0603a;      /* burnt sienna */
+  --color-accent-3: #d4823a;      /* warm orange bridge tone */
+  --color-ink: #1a1206;           /* dark warm ink for text on accent fills */
+  --color-danger: #d64b2e;
+
+  /* Glass — warm-tinted frost */
+  --color-glass: rgba(255, 240, 214, 0.05);
+  --color-glass-strong: rgba(255, 240, 214, 0.09);
+  --color-glass-border: rgba(255, 238, 210, 0.14);
+
+  /* Fonts (wired from next/font in layout.tsx) */
+  --font-display: var(--ff-display), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--ff-mono), ui-monospace, "SF Mono", monospace;
+
+  /* Fluid type scale */
+  --text-hero: clamp(2.75rem, 7vw, 6rem);
+  --text-h2: clamp(1.9rem, 4vw, 3rem);
+  --text-h3: clamp(1.25rem, 2.2vw, 1.6rem);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+:root {
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--color-glass-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+  color: #fff;
+}
+
+/* Custom scrollbar — subtle, on-brand */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--color-accent-2) 40%, var(--color-bg-elev));
+  border-radius: 999px;
+  border: 2px solid var(--color-bg);
+}
+
+/* Focus ring — accessible, on-brand */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Aurora background — slow-drifting radial orbs
+   ============================================================ */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.aurora::before {
+  width: 55vw;
+  height: 55vw;
+  left: -10vw;
+  top: -12vw;
+  background: radial-gradient(circle at 30% 30%, #e8a73c, transparent 62%);
+  animation: drift-a 26s var(--ease-in-out-expo) infinite alternate;
+}
+.aurora::after {
+  width: 50vw;
+  height: 50vw;
+  right: -12vw;
+  bottom: -14vw;
+  background: radial-gradient(circle at 60% 40%, #c0603a, transparent 62%);
+  animation: drift-b 32s var(--ease-in-out-expo) infinite alternate;
+}
+.aurora-orb {
+  position: absolute;
+  top: 35%;
+  left: 45%;
+  width: 34vw;
+  height: 34vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.4;
+  background: radial-gradient(circle at 50% 50%, #9a5626, transparent 60%);
+  animation: drift-c 38s var(--ease-in-out-expo) infinite alternate;
+  will-change: transform;
+}
+
+@keyframes drift-a {
+  to {
+    transform: translate3d(12vw, 8vh, 0) scale(1.15);
+  }
+}
+@keyframes drift-b {
+  to {
+    transform: translate3d(-10vw, -6vh, 0) scale(1.1);
+  }
+}
+@keyframes drift-c {
+  to {
+    transform: translate3d(-8vw, 10vh, 0) scale(0.9);
+  }
+}
+
+/* Fine noise/grain overlay — kills the "flat AI gradient" look */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora::before,
+  .aurora::after,
+  .aurora-orb {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   Glass primitives (utility classes; components layer on top)
+   ============================================================ */
+.glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--color-glass-border);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 243, 224, 0.13),
+    inset 0 -1px 1px 0 rgba(255, 243, 224, 0.04),
+    0 20px 50px -20px rgba(0, 0, 0, 0.65);
+}
+
+/* Chromium-only true refraction; harmless where unsupported */
+@supports (backdrop-filter: url(#x)) {
+  .glass-refract {
+    backdrop-filter: url(#liquid-glass) blur(6px) saturate(160%);
+  }
+}
+
+.glass-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.glass-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    130deg,
+    transparent 40%,
+    rgba(255, 240, 214, 0.09) 48%,
+    transparent 56%
+  );
+  pointer-events: none;
+}
+
+/* ============================================================
+   Scroll reveal — visible by default (no-JS safe); hidden only
+   when the .js gate is present, then revealed by IntersectionObserver.
+   ============================================================ */
+.reveal {
+  opacity: 1;
+}
+.js .reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 24px));
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    transform 0.7s var(--ease-out-expo);
+  will-change: opacity, transform;
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Gradient text accent */
+.text-gradient {
+  background: linear-gradient(100deg, var(--color-accent), var(--color-accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
