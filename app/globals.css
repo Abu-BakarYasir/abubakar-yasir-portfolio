@@ -68,6 +68,66 @@ body {
   overflow-x: hidden;
 }
 
+/* ============================================================
+   Reveal footer — the footer is pinned to the viewport bottom and
+   sits *behind* the page. The page shell is opaque and rides above
+   it, so scrolling to the end uncovers the footer like a curtain
+   lifting. No scroll listener, no transform — pure paint order.
+   ============================================================ */
+.page-shell {
+  position: relative;
+  z-index: 1; /* above .site-footer (z-index 0) */
+  background-color: var(--color-bg);
+  /* Casts onto the footer as the content slides up off it. */
+  box-shadow: 0 28px 44px -14px rgba(0, 0, 0, 0.9);
+}
+
+/* Content rides above the aurora, which now lives inside the shell. */
+.page-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Base state is an ordinary in-flow footer. That's also the no-JS and
+   pre-hydration state, and the permanent state on viewports too short to
+   show the whole footer — pinning one taller than the viewport would strand
+   its top rows off-screen where they can never be scrolled to. */
+.site-footer {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 28px 28px 0 0;
+  /* Warmer and lighter than the page, so the rounded top edge actually
+     reads as a separate panel sliding out from under the content. */
+  background:
+    linear-gradient(180deg, #2a2116 0%, #1b1610 55%, #171209 100%);
+  border-top: 1px solid rgba(255, 238, 210, 0.16);
+}
+
+/* Reveal mode. <FooterHeightSync /> adds .footer-reveal to <html> only when
+   the footer fits, and keeps --footer-h equal to its measured height. */
+.footer-reveal .site-footer {
+  position: fixed;
+  inset: auto 0 0 0;
+}
+
+/* The pinned footer is out of flow, so the page must reserve its height —
+   otherwise the last section sits on top of it and it never comes into view. */
+.footer-reveal body {
+  padding-bottom: var(--footer-h, 420px);
+}
+
+/* Warm glow across the footer's top edge, echoing the aurora. */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(48% 62% at 0% 0%, color-mix(in oklab, var(--color-accent-2) 26%, transparent) 0%, transparent 70%),
+    radial-gradient(42% 55% at 100% 0%, color-mix(in oklab, var(--color-accent) 18%, transparent) 0%, transparent 70%);
+}
+
 ::selection {
   background: color-mix(in oklab, var(--color-accent) 35%, transparent);
   color: #fff;
@@ -96,15 +156,28 @@ body {
 /* ============================================================
    Aurora background — slow-drifting radial orbs
    ============================================================ */
+/* The aurora spans the shell rather than the viewport, so it can never paint
+   over the revealed footer. `clip-path` (not `overflow: hidden`) does the
+   clipping — overflow would make this a scroll container and break the
+   sticky stage below. z-index 0, not -2: it lives inside .page-shell now,
+   and a negative index would hide it behind the shell's own background. */
 .aurora {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: -2;
-  overflow: hidden;
+  z-index: 0;
+  clip-path: inset(0);
   pointer-events: none;
 }
-.aurora::before,
-.aurora::after {
+
+/* Sticky, one viewport tall: the orbs track the viewport like `fixed` did,
+   but park at the shell's bottom edge instead of riding over the footer. */
+.aurora-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.aurora-stage::before,
+.aurora-stage::after {
   content: "";
   position: absolute;
   border-radius: 50%;
@@ -112,7 +185,7 @@ body {
   opacity: 0.55;
   will-change: transform;
 }
-.aurora::before {
+.aurora-stage::before {
   width: 55vw;
   height: 55vw;
   left: -10vw;
@@ -120,7 +193,7 @@ body {
   background: radial-gradient(circle at 30% 30%, #e8a73c, transparent 62%);
   animation: drift-a 26s var(--ease-in-out-expo) infinite alternate;
 }
-.aurora::after {
+.aurora-stage::after {
   width: 50vw;
   height: 50vw;
   right: -12vw;
@@ -160,17 +233,19 @@ body {
 
 /* Fine noise/grain overlay — kills the "flat AI gradient" look */
 .grain {
-  position: fixed;
+  /* Absolute like .aurora, so the texture also stops at the footer edge.
+     The pattern tiles, so spanning the full shell height looks identical. */
+  position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0; /* see .aurora — sits just above it, still below .page-content */
   pointer-events: none;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aurora::before,
-  .aurora::after,
+  .aurora-stage::before,
+  .aurora-stage::after,
   .aurora-orb {
     animation: none;
   }

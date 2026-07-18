@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import { profile } from "@/content/profile";
 import { GlassFilter } from "@/components/glass/GlassFilter";
+import { Footer } from "@/components/sections/Footer";
+import { FooterHeightSync } from "@/components/motion/FooterHeightSync";
 import "./globals.css";
 
 const display = Space_Grotesk({
@@ -114,12 +116,20 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <div className="aurora" aria-hidden>
-          <div className="aurora-orb" />
-        </div>
-        <div className="grain" aria-hidden />
         <GlassFilter />
-        {children}
+        {/* The shell is opaque and paints above the fixed footer; the aurora
+            has to live inside it, or the shell's background would hide it. */}
+        <div className="page-shell">
+          <div className="aurora" aria-hidden>
+            <div className="aurora-stage">
+              <div className="aurora-orb" />
+            </div>
+          </div>
+          <div className="grain" aria-hidden />
+          <div className="page-content">{children}</div>
+        </div>
+        <Footer />
+        <FooterHeightSync />
       </body>
     </html>
   );
