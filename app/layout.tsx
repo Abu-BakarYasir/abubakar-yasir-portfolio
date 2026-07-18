@@ -79,10 +79,17 @@ export default function RootLayout({
       className={`${display.variable} ${sans.variable} ${mono.variable}`}
     >
       <head>
-        {/* Add .js before paint so scroll-reveals start hidden only when JS can reveal them */}
+        {/* Runs before first paint. Adds .js so scroll-reveals start hidden
+            only when JS can reveal them, and restores a saved theme before
+            anything renders — otherwise a light-theme visitor gets a dark
+            flash on every navigation. Dark is the default, so no stored
+            preference means no attribute and no work. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: "document.documentElement.classList.add('js')",
+            __html:
+              "document.documentElement.classList.add('js');" +
+              "try{var t=localStorage.getItem('theme');" +
+              "if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}",
           }}
         />
         <script

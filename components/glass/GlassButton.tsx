@@ -8,7 +8,7 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary:
-    "text-[var(--color-ink)] bg-[linear-gradient(100deg,var(--color-accent),var(--color-accent-2))] shadow-[0_10px_30px_-10px_rgba(232,167,60,0.55)] hover:shadow-[0_16px_40px_-10px_rgba(192,96,58,0.6)] hover:-translate-y-0.5",
+    "text-[var(--color-ink)] bg-[linear-gradient(100deg,var(--color-accent),var(--color-accent-2))] shadow-[var(--shadow-accent)] hover:shadow-[var(--shadow-accent-hover)] hover:-translate-y-0.5",
   glass:
     "glass text-[var(--color-fg)] hover:bg-[var(--color-glass-strong)] hover:-translate-y-0.5",
   ghost:

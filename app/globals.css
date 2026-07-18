@@ -1,28 +1,11 @@
 @import "tailwindcss";
 
 /* ============================================================
-   Design tokens — dark, cinematic, liquid glass
+   Non-colour design tokens. These stay in @theme so the Tailwind
+   utilities built from them (font-display, font-mono, …) keep working.
+   Colours deliberately live outside @theme — see below.
    ============================================================ */
 @theme inline {
-  /* Surfaces — warm near-black */
-  --color-bg: #14100b;
-  --color-bg-elev: #1e1810;
-  --color-fg: #ede4d3;
-  --color-fg-muted: #b3a88f;
-  --color-fg-faint: #857a63;
-
-  /* Accents — molten amber & burnt sienna */
-  --color-accent: #e8a73c;        /* molten amber / gold */
-  --color-accent-2: #c0603a;      /* burnt sienna */
-  --color-accent-3: #d4823a;      /* warm orange bridge tone */
-  --color-ink: #1a1206;           /* dark warm ink for text on accent fills */
-  --color-danger: #d64b2e;
-
-  /* Glass — warm-tinted frost */
-  --color-glass: rgba(255, 240, 214, 0.05);
-  --color-glass-strong: rgba(255, 240, 214, 0.09);
-  --color-glass-border: rgba(255, 238, 210, 0.14);
-
   /* Fonts (wired from next/font in layout.tsx) */
   --font-display: var(--ff-display), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
@@ -39,12 +22,113 @@
 }
 
 /* ============================================================
-   Base
+   Colour tokens — dark, cinematic, liquid glass (the default).
+   Defined as plain custom properties rather than @theme entries so a
+   single attribute on <html> can swap the whole palette. Components
+   read them as var(--color-*), so nothing downstream changes.
    ============================================================ */
 :root {
   color-scheme: dark;
+
+  /* Surfaces — warm near-black */
+  --color-bg: #14100b;
+  --color-bg-elev: #1e1810;
+  --color-fg: #ede4d3;
+  --color-fg-muted: #b3a88f;
+  --color-fg-faint: #857a63;
+
+  /* Accents — molten amber & burnt sienna */
+  --color-accent: #e8a73c;        /* molten amber / gold */
+  --color-accent-2: #c0603a;      /* burnt sienna */
+  --color-accent-3: #d4823a;      /* warm orange bridge tone */
+  --color-ink: #1a1206;           /* text on accent fills */
+  --color-danger: #d64b2e;
+
+  /* Glass — warm-tinted frost */
+  --color-glass: rgba(255, 240, 214, 0.05);
+  --color-glass-strong: rgba(255, 240, 214, 0.09);
+  --color-glass-border: rgba(255, 238, 210, 0.14);
+
+  /* Glass lighting — inset highlights read as light-on-dark here */
+  --glass-hi-top: rgba(255, 243, 224, 0.13);
+  --glass-hi-bottom: rgba(255, 243, 224, 0.04);
+  --glass-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.65);
+  --glass-sheen: rgba(255, 240, 214, 0.09);
+
+  /* Ambient layers */
+  --aurora-opacity: 0.55;
+  --aurora-orb-opacity: 0.4;
+  --grain-opacity: 0.04;
+
+  /* Depth & effects */
+  --shell-shadow: 0 28px 44px -14px rgba(0, 0, 0, 0.9);
+  --shadow-accent: 0 10px 30px -10px rgba(232, 167, 60, 0.55);
+  --shadow-accent-hover: 0 16px 40px -10px rgba(192, 96, 58, 0.6);
+  --shadow-card-hover: 0 30px 70px -30px rgba(232, 167, 60, 0.32);
+  --media-scrim: rgba(10, 14, 26, 0.55);
+  --selection-fg: #fff;
+
+  /* Reveal footer surface */
+  --footer-top: #2a2116;
+  --footer-mid: #1b1610;
+  --footer-bottom: #171209;
 }
 
+/* ============================================================
+   Warm parchment — the daylight counterpart of the same brand.
+   Amber deepens to #a86a12 so it clears 4.5:1 on cream; the glass
+   flips from light-on-dark frost to white-on-warm frost.
+   ============================================================ */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --color-bg: #faf6ee;
+  --color-bg-elev: #ffffff;
+  --color-fg: #1f1810;
+  --color-fg-muted: #6b5f4d;
+  --color-fg-faint: #77695a;
+
+  /* Deepened until amber clears 4.5:1 both as text on cream/white and
+     against the cream `ink` used on top of it as a fill. */
+  --color-accent: #96600f;
+  --color-accent-2: #b3542f;
+  --color-accent-3: #a3690f;
+  --color-ink: #fff8ec;           /* cream text on the deepened accent fills */
+  --color-danger: #b23a20;
+
+  --color-glass: rgba(255, 255, 255, 0.55);
+  --color-glass-strong: rgba(255, 255, 255, 0.78);
+  --color-glass-border: rgba(31, 24, 16, 0.12);
+
+  --glass-hi-top: rgba(255, 255, 255, 0.9);
+  --glass-hi-bottom: rgba(31, 24, 16, 0.04);
+  --glass-shadow: 0 20px 40px -24px rgba(61, 44, 22, 0.22);
+  /* The sheen paints over panel content, so on light glass it has to stay
+     faint — at 0.5 it visibly washed out buttons sitting inside the panel. */
+  --glass-sheen: rgba(255, 255, 255, 0.2);
+
+  /* The orbs would read as muddy blotches at full strength on cream. */
+  --aurora-opacity: 0.28;
+  --aurora-orb-opacity: 0.2;
+  --grain-opacity: 0.03;
+
+  --shell-shadow: 0 28px 44px -18px rgba(61, 44, 22, 0.28);
+  --shadow-accent: 0 10px 30px -10px rgba(150, 96, 15, 0.4);
+  --shadow-accent-hover: 0 16px 40px -10px rgba(179, 84, 47, 0.45);
+  --shadow-card-hover: 0 30px 70px -30px rgba(61, 44, 22, 0.3);
+  --media-scrim: rgba(31, 24, 16, 0.3);
+  --selection-fg: #1f1810;
+
+  /* Lighter than the page, mirroring how the dark footer lifts off its
+     background. A darker sand panel dropped faint text under 4.5:1. */
+  --footer-top: #fffdf9;
+  --footer-mid: #fdfaf3;
+  --footer-bottom: #f8f2e6;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
 * {
   border-color: var(--color-glass-border);
 }
@@ -66,6 +150,9 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  transition:
+    background-color 0.3s var(--ease-out-expo),
+    color 0.3s var(--ease-out-expo);
 }
 
 /* ============================================================
@@ -79,7 +166,8 @@ body {
   z-index: 1; /* above .site-footer (z-index 0) */
   background-color: var(--color-bg);
   /* Casts onto the footer as the content slides up off it. */
-  box-shadow: 0 28px 44px -14px rgba(0, 0, 0, 0.9);
+  box-shadow: var(--shell-shadow);
+  transition: background-color 0.3s var(--ease-out-expo);
 }
 
 /* Content rides above the aurora, which now lives inside the shell. */
@@ -97,11 +185,22 @@ body {
   z-index: 0;
   overflow: hidden;
   border-radius: 28px 28px 0 0;
-  /* Warmer and lighter than the page, so the rounded top edge actually
+  /* Tonally offset from the page, so the rounded top edge actually
      reads as a separate panel sliding out from under the content. */
-  background:
-    linear-gradient(180deg, #2a2116 0%, #1b1610 55%, #171209 100%);
-  border-top: 1px solid rgba(255, 238, 210, 0.16);
+  background: linear-gradient(
+    180deg,
+    var(--footer-top) 0%,
+    var(--footer-mid) 55%,
+    var(--footer-bottom) 100%
+  );
+  border-top: 1px solid var(--color-glass-border);
+}
+
+/* The dark footer sits lighter than its page, which drops the faint tone to
+   3.7:1 against it. Re-base the token on this surface rather than lightening
+   it everywhere. Light mode needs no override — its footer is lighter still. */
+:root:not([data-theme="light"]) .site-footer {
+  --color-fg-faint: #9b8f77;
 }
 
 /* Reveal mode. <FooterHeightSync /> adds .footer-reveal to <html> only when
@@ -130,7 +229,7 @@ body {
 
 ::selection {
   background: color-mix(in oklab, var(--color-accent) 35%, transparent);
-  color: #fff;
+  color: var(--selection-fg);
 }
 
 /* Custom scrollbar — subtle, on-brand */
@@ -182,7 +281,7 @@ body {
   position: absolute;
   border-radius: 50%;
   filter: blur(80px);
-  opacity: 0.55;
+  opacity: var(--aurora-opacity);
   will-change: transform;
 }
 .aurora-stage::before {
@@ -209,7 +308,7 @@ body {
   height: 34vw;
   border-radius: 50%;
   filter: blur(90px);
-  opacity: 0.4;
+  opacity: var(--aurora-orb-opacity);
   background: radial-gradient(circle at 50% 50%, #9a5626, transparent 60%);
   animation: drift-c 38s var(--ease-in-out-expo) infinite alternate;
   will-change: transform;
@@ -239,7 +338,7 @@ body {
   inset: 0;
   z-index: 0; /* see .aurora — sits just above it, still below .page-content */
   pointer-events: none;
-  opacity: 0.04;
+  opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -260,9 +359,12 @@ body {
   -webkit-backdrop-filter: blur(16px) saturate(160%);
   border: 1px solid var(--color-glass-border);
   box-shadow:
-    inset 0 1px 0 0 rgba(255, 243, 224, 0.13),
-    inset 0 -1px 1px 0 rgba(255, 243, 224, 0.04),
-    0 20px 50px -20px rgba(0, 0, 0, 0.65);
+    inset 0 1px 0 0 var(--glass-hi-top),
+    inset 0 -1px 1px 0 var(--glass-hi-bottom),
+    var(--glass-shadow);
+  transition:
+    background-color 0.3s var(--ease-out-expo),
+    border-color 0.3s var(--ease-out-expo);
 }
 
 /* Chromium-only true refraction; harmless where unsupported */
@@ -283,7 +385,7 @@ body {
   background: linear-gradient(
     130deg,
     transparent 40%,
-    rgba(255, 240, 214, 0.09) 48%,
+    var(--glass-sheen) 48%,
     transparent 56%
   );
   pointer-events: none;
@@ -322,4 +424,73 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* ============================================================
+   Theme toggle — appearance is driven entirely by [data-theme] on
+   <html>, never by React state. That keeps it correct on the very
+   first paint (the inline script in layout.tsx sets the attribute
+   before hydration) and avoids any hydration mismatch.
+   ============================================================ */
+.theme-toggle {
+  --tt-w: 54px;
+  --tt-h: 28px;
+  --tt-pad: 3px;
+  position: relative;
+  flex-shrink: 0;
+  width: var(--tt-w);
+  height: var(--tt-h);
+  padding: 0;
+  border: 1px solid var(--color-glass-border);
+  border-radius: 999px;
+  background: var(--color-glass);
+  cursor: pointer;
+  transition:
+    background-color 0.22s var(--ease-out-expo),
+    border-color 0.22s var(--ease-out-expo);
+}
+.theme-toggle:hover {
+  background: var(--color-glass-strong);
+}
+
+.tt-knob {
+  position: absolute;
+  top: var(--tt-pad);
+  left: var(--tt-pad);
+  display: grid;
+  place-items: center;
+  width: calc(var(--tt-h) - var(--tt-pad) * 2);
+  height: calc(var(--tt-h) - var(--tt-pad) * 2);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
+  color: var(--color-ink);
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.35);
+  /* Dark is the default theme, so the knob rests on the right. */
+  transform: translateX(calc(var(--tt-w) - var(--tt-h)));
+  transition: transform 0.32s var(--ease-out-expo);
+}
+:root[data-theme="light"] .tt-knob {
+  transform: translateX(0);
+}
+
+.tt-knob svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Each theme shows the icon for the theme you're currently in. */
+.tt-sun {
+  display: none;
+}
+:root[data-theme="light"] .tt-sun {
+  display: block;
+}
+:root[data-theme="light"] .tt-moon {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tt-knob {
+    transition: none;
+  }
 }

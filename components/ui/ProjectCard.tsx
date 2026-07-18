@@ -6,7 +6,10 @@ import { GlassCard } from "@/components/glass/GlassCard";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <GlassCard className="group flex flex-col p-0" refract={false}>
+    <GlassCard
+      className="group relative flex cursor-pointer flex-col p-0 focus-within:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)]"
+      refract={false}
+    >
       <ProjectMedia project={project} />
 
       <div className="flex flex-1 flex-col p-6">
@@ -33,14 +36,18 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
 
         <div className="mt-6 flex items-center gap-4 border-t border-[var(--color-glass-border)] pt-4">
+          {/* `after:` overlay stretches this link across the whole card, so a
+              click anywhere — image, title, tags — opens the case study.
+              Keeps one anchor, so no invalid nesting and one tab stop. */}
           <Link
             href={`/projects/${project.slug}`}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-fg)] transition-colors hover:text-[var(--color-accent)]"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-fg)] outline-none transition-colors after:absolute after:inset-0 after:rounded-2xl after:content-[''] group-hover:text-[var(--color-accent)]"
           >
             Case study
             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
-          <span className="ml-auto flex items-center gap-1">
+          {/* Raised above the overlay so these stay independently clickable. */}
+          <span className="relative z-10 ml-auto flex items-center gap-1">
             {project.liveUrl && (
               <a
                 href={project.liveUrl}
@@ -86,7 +93,7 @@ function ProjectMedia({ project }: { project: Project }) {
       ) : (
         <PlaceholderMedia title={project.title} pending={project.imagesPending} />
       )}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(10,14,26,0.55),transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,var(--media-scrim),transparent_55%)]" />
     </div>
   );
 }

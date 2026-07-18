@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { Menu, X, FileDown } from "lucide-react";
 import { profile } from "@/content/profile";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 const links = [
@@ -100,6 +101,7 @@ export function Nav() {
           </ul>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <a
               href={profile.contact.resume}
               className="hidden items-center gap-1.5 rounded-full border border-[var(--color-glass-border)] px-4 py-1.5 text-sm text-[var(--color-fg)] transition-colors hover:bg-[var(--color-glass-strong)] sm:inline-flex"

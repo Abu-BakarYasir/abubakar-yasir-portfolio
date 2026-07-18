@@ -21,7 +21,7 @@ export function GlassCard({
       className={cn(
         "relative overflow-hidden p-6 transition-all duration-500 ease-[var(--ease-out-expo)]",
         interactive &&
-          "hover:-translate-y-1 hover:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)] hover:shadow-[0_30px_70px_-30px_rgba(232,167,60,0.32)]",
+          "hover:-translate-y-1 hover:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)] hover:shadow-[var(--shadow-card-hover)]",
         className,
       )}
       {...props}
