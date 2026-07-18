@@ -3,8 +3,12 @@
 
 // `width`/`height` are the file's intrinsic pixel size — needed so tall
 // full-page captures aren't squashed into the default 16:9 aspect ratio.
+// `srcLight` is an alternate cut of the same image for the light theme. Both
+// variants render and CSS picks one off [data-theme] — see ThemedImage. Omit
+// it and `src` is used in both themes.
 export type ProjectImage = {
   src: string;
+  srcLight?: string;
   alt: string;
   caption?: string;
   width?: number;
@@ -67,10 +71,11 @@ export const projects: Project[] = [
       "Evidence-grounded answers with ICD-10 / SNOMED citations",
     ],
     cover: {
-      src: "/projects/neuromedica/dashboard.png",
-      alt: "neuroMedica clinical dashboard showing patient management and stats",
-      width: 1826,
-      height: 903,
+      src: "/projects/neuromedica/cover-dark.png",
+      srcLight: "/projects/neuromedica/cover-light.png",
+      alt: "neuroMedica case-study cover — layered clinical dashboard, chest X-ray analysis and differential diagnosis panels",
+      width: 2048,
+      height: 1152,
     },
     images: [
       {
@@ -145,10 +150,11 @@ export const projects: Project[] = [
       "Auto-generated, citation-aware intelligence reports",
     ],
     cover: {
-      src: "/projects/magnai/dashboard.png",
-      alt: "Magnai tenant dashboard for UK public-affairs monitoring",
-      width: 1425,
-      height: 2556,
+      src: "/projects/magnai/cover-dark.png",
+      srcLight: "/projects/magnai/cover-light.png",
+      alt: "Magnai case-study cover — layered intelligence report, tenant dashboard and stakeholder-mapping panels",
+      width: 2048,
+      height: 1152,
     },
     images: [
       {
@@ -225,11 +231,13 @@ export const projects: Project[] = [
     ],
     // TODO: only the dashboard is captured so far — add Clinicals, Patients,
     // Devices, Analytics and Reports screens (all behind the app login).
+    // No light-theme cut of this cover yet, so `srcLight` is omitted and the
+    // dark one is used in both themes.
     cover: {
-      src: "/projects/lynxflow-health/dashboard.png",
-      alt: "Lynxflow Health clinical dashboard with device compliance stats",
-      width: 1881,
-      height: 945,
+      src: "/projects/lynxflow-health/cover-dark.png",
+      alt: "Lynxflow-Health case-study cover — clinical dashboard panel showing connected-device compliance",
+      width: 2048,
+      height: 1152,
     },
     images: [
       {
@@ -242,34 +250,17 @@ export const projects: Project[] = [
       },
     ],
   },
-  {
-    slug: "slack-bounty-bot",
-    title: "Slack-Bounty-Bot",
-    tagline: "Real-time Replit bounty notifier",
-    year: "2025",
-    status: "GitHub",
-    featured: false,
-    repoUrl: "https://github.com/Abu-BakarYasir/slack-bounty-bot",
-    stack: ["Python", "Flask", "Firecrawl API", "Slack Webhooks", "Vercel"],
-    problem:
-      "High-value Replit bounties disappear fast. Watching the board manually doesn't scale — you need a filtered, real-time push the moment something worth your time appears.",
-    approach: [
-      "Built a Python microservice that scrapes and filters high-value Replit bounties in real time.",
-      "Pushed automated Slack alerts via webhooks, deployed as a Flask API on Vercel.",
-      "Ran continuous monitoring on a CRON schedule so nothing is missed.",
-    ],
-    highlights: [
-      "Real-time scraping + filtering with Firecrawl",
-      "Slack webhook alerts",
-      "CRON-based continuous monitoring on Vercel",
-    ],
-    images: [],
-    imagesPending: true,
-  },
 ];
 
 // Secondary open-source repos shown as a compact grid (no full case study).
 export const openSource = [
+  {
+    name: "slack-bounty-bot",
+    lang: "Python · Flask",
+    summary:
+      "Real-time Replit bounty notifier — Firecrawl scraping and filtering, Slack webhook alerts, CRON-scheduled on Vercel.",
+    url: "https://github.com/Abu-BakarYasir/slack-bounty-bot",
+  },
   {
     name: "Rag_App",
     lang: "Python",

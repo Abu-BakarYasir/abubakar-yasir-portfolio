@@ -1,18 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  ExternalLink,
-  Github,
-} from "lucide-react";
+import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import { projects } from "@/content/projects";
 import { profile } from "@/content/profile";
 import { GlassPanel } from "@/components/glass/GlassPanel";
 import { GlassButton } from "@/components/glass/GlassButton";
+import { ProjectGallery } from "@/components/ui/ProjectGallery";
+import { ProjectNav } from "@/components/ui/ProjectNav";
+import { ThemedImage } from "@/components/ui/ThemedImage";
 import { Reveal } from "@/components/motion/Reveal";
 
 export function generateStaticParams() {
@@ -43,7 +39,9 @@ export default async function CaseStudy({
   const project = projects[index];
   if (!project) notFound();
 
+  // Wrap in both directions so the rail is a loop, never a dead end.
   const next = projects[(index + 1) % projects.length];
+  const prev = projects[(index - 1 + projects.length) % projects.length];
 
   return (
     <>
@@ -101,34 +99,29 @@ export default async function CaseStudy({
           </div>
         </Reveal>
 
-        {/* Cover / gallery */}
+        {/* Cover — designed key art, framed like a gallery slide so the two
+            read as one stack. The real screenshots follow below it. */}
+        {project.cover && (
+          <Reveal className="mt-14" y={28}>
+            <div className="glass relative overflow-hidden rounded-2xl p-1.5">
+              <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
+                <ThemedImage
+                  image={project.cover}
+                  fill
+                  priority
+                  sizes="(max-width: 896px) 100vw, 896px"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </Reveal>
+        )}
+
+        {/* Gallery */}
         {project.images.length > 0 ? (
-          <div className="mt-14 space-y-6">
-            {project.images.map((img, i) => (
-              <Reveal key={img.src} delay={i === 0 ? 0 : 0.05} y={28}>
-                <figure>
-                  <GlassPanel className="overflow-hidden p-1.5">
-                    <div className="relative overflow-hidden rounded-xl">
-                      <Image
-                        src={img.src}
-                        alt={img.alt}
-                        width={img.width ?? 1600}
-                        height={img.height ?? 900}
-                        sizes="(max-width: 896px) 100vw, 896px"
-                        className="h-auto w-full"
-                        priority={i === 0}
-                      />
-                    </div>
-                  </GlassPanel>
-                  {img.caption && (
-                    <figcaption className="mt-3 text-center font-mono text-xs text-[var(--color-fg-faint)]">
-                      {img.caption}
-                    </figcaption>
-                  )}
-                </figure>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal className={project.cover ? "mt-8" : "mt-14"} y={28}>
+            <ProjectGallery images={project.images} />
+          </Reveal>
         ) : (
           <Reveal className="mt-14">
             <GlassPanel className="grid place-items-center p-12 text-center">
@@ -202,34 +195,9 @@ export default async function CaseStudy({
           </Reveal>
         </div>
 
-        {/* Next project */}
-        <Reveal className="mt-20">
-          <Link
-            href={`/projects/${next.slug}`}
-            className="group flex items-center justify-between gap-4 rounded-2xl border border-[var(--color-glass-border)] bg-[var(--color-glass)] p-6 transition-all duration-300 hover:border-[color-mix(in_oklab,var(--color-accent)_40%,transparent)] hover:bg-[var(--color-glass-strong)]"
-          >
-            <span>
-              <span className="font-mono text-xs text-[var(--color-fg-faint)]">
-                Next project
-              </span>
-              <span className="mt-1 block font-display text-xl font-semibold">
-                {next.title}
-              </span>
-            </span>
-            <ArrowRight className="h-6 w-6 text-[var(--color-fg-muted)] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[var(--color-accent)]" />
-          </Link>
+        <Reveal>
+          <ProjectNav prev={prev} next={next} />
         </Reveal>
-
-        {/* Back home */}
-        <div className="mt-8 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 font-mono text-sm text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-accent)]"
-          >
-            Back to home
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
-        </div>
       </main>
     </>
   );

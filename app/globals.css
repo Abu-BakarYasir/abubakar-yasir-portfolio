@@ -418,6 +418,30 @@ body {
   }
 }
 
+/* Scroll rails keep their own affordances (arrows, dots, snap), so the
+   native bar is redundant — hidden without disabling the scrolling itself. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Theme-swapped media (see ThemedImage). The theme lives in a [data-theme]
+   attribute rather than React state, so both cuts render and CSS picks one —
+   no wrong-image flash before hydration. Dark is the default, i.e. no
+   attribute, so .theme-dark-only needs no rule of its own to be visible. */
+.theme-light-only {
+  display: none;
+}
+[data-theme="light"] .theme-dark-only {
+  display: none;
+}
+[data-theme="light"] .theme-light-only {
+  display: block;
+}
+
 /* Gradient text accent */
 .text-gradient {
   background: linear-gradient(100deg, var(--color-accent), var(--color-accent-2));

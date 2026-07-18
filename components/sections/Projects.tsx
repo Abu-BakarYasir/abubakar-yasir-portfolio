@@ -1,12 +1,11 @@
 import { ArrowUpRight } from "lucide-react";
 import { projects, openSource } from "@/content/projects";
-import { ProjectCard } from "@/components/ui/ProjectCard";
+import { ProjectSlider } from "@/components/ui/ProjectSlider";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
 
 export function Projects() {
   const featured = projects.filter((p) => p.featured);
-  const other = projects.filter((p) => !p.featured);
 
   return (
     <section id="projects" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32">
@@ -16,25 +15,10 @@ export function Projects() {
         title="Things I've built and shipped"
       />
 
-      {/* Flagship case studies */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {featured.map((p, i) => (
-          <Reveal key={p.slug} delay={(i % 2) * 0.08} y={28}>
-            <ProjectCard project={p} />
-          </Reveal>
-        ))}
-      </div>
-
-      {/* Non-flagship (Slack bot etc.) */}
-      {other.length > 0 && (
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          {other.map((p, i) => (
-            <Reveal key={p.slug} delay={(i % 2) * 0.08} y={28}>
-              <ProjectCard project={p} />
-            </Reveal>
-          ))}
-        </div>
-      )}
+      {/* Flagship case studies — a horizontal rail rather than a tall grid */}
+      <Reveal y={28}>
+        <ProjectSlider projects={featured} />
+      </Reveal>
 
       {/* Open-source grid */}
       <Reveal className="mt-20">

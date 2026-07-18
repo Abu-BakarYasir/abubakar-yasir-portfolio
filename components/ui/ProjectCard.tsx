@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
 import type { Project } from "@/content/projects";
 import { GlassCard } from "@/components/glass/GlassCard";
+import { ThemedImage } from "@/components/ui/ThemedImage";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
@@ -81,11 +81,12 @@ function ProjectMedia({ project }: { project: Project }) {
   const cover = project.cover ?? project.images[0];
 
   return (
-    <div className="relative aspect-[16/10] overflow-hidden rounded-t-2xl border-b border-[var(--color-glass-border)]">
+    // 16/9 matches the cover art exactly. The covers carry their own title
+    // typography, so a mismatched frame would crop words off the edge.
+    <div className="relative aspect-[16/9] overflow-hidden rounded-t-2xl border-b border-[var(--color-glass-border)]">
       {cover ? (
-        <Image
-          src={cover.src}
-          alt={cover.alt}
+        <ThemedImage
+          image={cover}
           fill
           sizes="(max-width: 768px) 100vw, 560px"
           className="object-cover object-top transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.04]"

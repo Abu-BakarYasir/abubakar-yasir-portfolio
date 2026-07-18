@@ -110,7 +110,7 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {profile.name}. All rights reserved.
           </p>
-          <p>Lahore, PK · Built with Next.js &amp; liquid glass</p>
+          <p>Lahore, PK · {profile.availability}</p>
         </div>
       </div>
     </footer>
