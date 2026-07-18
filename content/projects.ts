@@ -231,10 +231,9 @@ export const projects: Project[] = [
     ],
     // TODO: only the dashboard is captured so far — add Clinicals, Patients,
     // Devices, Analytics and Reports screens (all behind the app login).
-    // No light-theme cut of this cover yet, so `srcLight` is omitted and the
-    // dark one is used in both themes.
     cover: {
       src: "/projects/lynxflow-health/cover-dark.png",
+      srcLight: "/projects/lynxflow-health/cover-light.png",
       alt: "Lynxflow-Health case-study cover — clinical dashboard panel showing connected-device compliance",
       width: 2048,
       height: 1152,
