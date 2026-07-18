@@ -1,7 +1,15 @@
 // Flagship case studies + secondary open-source projects.
 // `images` are public paths; add real files under /public/projects/<slug>/.
 
-export type ProjectImage = { src: string; alt: string; caption?: string };
+// `width`/`height` are the file's intrinsic pixel size — needed so tall
+// full-page captures aren't squashed into the default 16:9 aspect ratio.
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+  width?: number;
+  height?: number;
+};
 
 export type Project = {
   slug: string;
@@ -61,29 +69,47 @@ export const projects: Project[] = [
     cover: {
       src: "/projects/neuromedica/dashboard.png",
       alt: "neuroMedica clinical dashboard showing patient management and stats",
+      width: 1826,
+      height: 903,
     },
     images: [
       {
         src: "/projects/neuromedica/dashboard.png",
         alt: "neuroMedica clinical dashboard — patient management overview",
         caption: "Clinical dashboard — patient management and at-a-glance stats.",
+        width: 1826,
+        height: 903,
       },
       {
         src: "/projects/neuromedica/xray.png",
         alt: "Chest X-ray analysis with DenseNet pathology predictions and confidence bars",
         caption:
           "Chest X-ray analysis — DenseNet-121 multi-label predictions with Grad-CAM and calibrated confidence.",
+        width: 1909,
+        height: 934,
       },
       {
         src: "/projects/neuromedica/symptom-explorer.png",
         alt: "Symptom Explorer producing an evidence-grounded differential diagnosis with citations",
         caption:
           "Symptom Explorer — evidence-grounded differential diagnosis with ICD-10 / SNOMED codes and sources.",
+        width: 1913,
+        height: 926,
+      },
+      {
+        src: "/projects/neuromedica/prescription-scan.png",
+        alt: "AI prescription scanner dialog extracting patient details from an uploaded prescription image",
+        caption:
+          "Medical OCR — vision-AI prescription scanning that auto-extracts patient details and medications.",
+        width: 1805,
+        height: 816,
       },
       {
         src: "/projects/neuromedica/features.png",
         alt: "neuroMedica feature grid: X-ray, ECG, Q&A, OCR, symptom explorer, report generator",
         caption: "Capabilities — six clinical AI modules unified in one workspace.",
+        width: 1831,
+        height: 897,
       },
     ],
   },
@@ -118,8 +144,62 @@ export const projects: Project[] = [
       "Stakeholder mapping with relevance scoring",
       "Auto-generated, citation-aware intelligence reports",
     ],
-    images: [],
-    imagesPending: true,
+    cover: {
+      src: "/projects/magnai/dashboard.png",
+      alt: "Magnai tenant dashboard for UK public-affairs monitoring",
+      width: 1425,
+      height: 2556,
+    },
+    images: [
+      {
+        src: "/projects/magnai/report-detail.png",
+        alt: "AI-generated Energy & Net Zero parliamentary monitor report with executive summary, debates, questions and recommended actions",
+        caption:
+          "The output — an AI-authored parliamentary monitor: executive summary, chamber debates, Q&A analysis and recommended actions.",
+        width: 1425,
+        height: 2670,
+      },
+      {
+        src: "/projects/magnai/monitoring-setup.png",
+        alt: "Monitor setup screen selecting UK, Scotland, Wales, NI, social and government sources",
+        caption:
+          "Monitor setup — nine source types across four jurisdictions feed the orchestrator's sub-agents.",
+        width: 1425,
+        height: 1857,
+      },
+      {
+        src: "/projects/magnai/dashboard.png",
+        alt: "Magnai tenant dashboard with live parliament activity, tasks, projects and scheduled reports",
+        caption:
+          "Tenant dashboard — live parliament activity, tracked bills, scheduled reports and think-tank updates.",
+        width: 1425,
+        height: 2556,
+      },
+      {
+        src: "/projects/magnai/monitoring-hub.png",
+        alt: "Monitoring hub grouping reports by jurisdiction and source type",
+        caption:
+          "Monitoring hub — reports grouped by jurisdiction, government body and social channel.",
+        width: 1425,
+        height: 1963,
+      },
+      {
+        src: "/projects/magnai/stakeholder-map.png",
+        alt: "Stakeholder mapping table of MPs and Lords with party, constituency, role and relevance scoring",
+        caption:
+          "Stakeholder mapping — parliamentarians scored for relevance, with outreach tracking.",
+        width: 1425,
+        height: 1323,
+      },
+      {
+        src: "/projects/magnai/bill-tracking.png",
+        alt: "Bill tracking across UK, Scottish, Welsh and NI legislatures showing stage badges",
+        caption:
+          "Bill tracking — legislative stage monitoring across all four UK legislatures.",
+        width: 1440,
+        height: 900,
+      },
+    ],
   },
   {
     slug: "lynxflow-health",
@@ -143,8 +223,24 @@ export const projects: Project[] = [
       "In-platform device ordering",
       "Automated vulnerability-scanning bot",
     ],
-    images: [],
-    imagesPending: true,
+    // TODO: only the dashboard is captured so far — add Clinicals, Patients,
+    // Devices, Analytics and Reports screens (all behind the app login).
+    cover: {
+      src: "/projects/lynxflow-health/dashboard.png",
+      alt: "Lynxflow Health clinical dashboard with device compliance stats",
+      width: 1881,
+      height: 945,
+    },
+    images: [
+      {
+        src: "/projects/lynxflow-health/dashboard.png",
+        alt: "Lynxflow Health dashboard showing device compliance, battery health, connected devices and facility information",
+        caption:
+          "Clinical dashboard — connected-device compliance, battery health and facility detail from Tenovi hardware.",
+        width: 1881,
+        height: 945,
+      },
+    ],
   },
   {
     slug: "slack-bounty-bot",

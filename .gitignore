@@ -29,6 +29,7 @@ Thumbs.db
 .idea/
 
 # --- Local-only (not part of the site) ---
+# Raw screenshot sources; the versions the site ships live in public/projects/.
 Job-posting-handler/
-neuro-medica-pics/
+project-pics/
 PLAN.md

@@ -112,8 +112,8 @@ export default async function CaseStudy({
                       <Image
                         src={img.src}
                         alt={img.alt}
-                        width={1600}
-                        height={900}
+                        width={img.width ?? 1600}
+                        height={img.height ?? 900}
                         sizes="(max-width: 896px) 100vw, 896px"
                         className="h-auto w-full"
                         priority={i === 0}
