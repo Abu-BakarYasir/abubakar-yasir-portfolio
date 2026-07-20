@@ -34,3 +34,7 @@ Thumbs.db
 Job-posting-handler/
 project-pics/
 PLAN.md
+# Original resume files. The two the site serves are copied to public/ under
+# clean names; this folder also holds a resume belonging to someone else, which
+# must never end up in public/ or in a commit.
+resume-sources/

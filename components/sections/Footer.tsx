@@ -39,8 +39,9 @@ export function Footer() {
             </p>
 
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-[var(--color-fg-muted)]">
-              {profile.availability} — building AI products end-to-end, from
-              retrieval pipelines to the deployed UI.
+              Building AI products from the retrieval layer up to the interface.
+              {" "}
+              {profile.availability}.
             </p>
 
             <ul className="mt-7 flex items-center gap-2.5">

@@ -32,11 +32,11 @@ const siteUrl = "https://abubakar.dev";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${profile.name} — ${profile.role}`,
-    template: `%s — ${profile.name}`,
+    default: `${profile.name} · ${profile.role}`,
+    template: `%s · ${profile.name}`,
   },
   description:
-    "Abu Bakar Yasir — Full-Stack & AI Engineer building RAG pipelines, multi-agent LLM systems, and multi-tenant SaaS end-to-end.",
+    "Abu Bakar Yasir is a full-stack and AI engineer in Lahore, building RAG pipelines, multi-agent LLM systems and multi-tenant SaaS.",
   keywords: [
     "Abu Bakar Yasir",
     "Full-Stack Engineer",
@@ -49,15 +49,15 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: profile.name }],
   openGraph: {
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} · ${profile.role}`,
     description:
-      "Full-Stack & AI Engineer building RAG pipelines, multi-agent LLM systems, and multi-tenant SaaS end-to-end.",
+      "Full-stack and AI engineer building RAG pipelines, multi-agent LLM systems and multi-tenant SaaS.",
     type: "website",
     url: siteUrl,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} · ${profile.role}`,
   },
 };
 

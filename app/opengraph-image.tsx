@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Abu Bakar Yasir — Full-Stack & AI Engineer";
+export const alt = "Abu Bakar Yasir · Full-Stack & AI Engineer";
 
 export default function OG() {
   return new ImageResponse(
@@ -79,7 +79,7 @@ export default function OG() {
             maxWidth: 900,
           }}
         >
-          RAG pipelines · multi-agent LLM systems · multi-tenant SaaS — shipped end-to-end.
+          RAG pipelines · multi-agent LLM systems · multi-tenant SaaS
         </div>
       </div>
     ),

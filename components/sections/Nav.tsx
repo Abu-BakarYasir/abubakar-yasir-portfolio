@@ -152,7 +152,7 @@ export function Nav() {
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-2 rounded-xl px-4 py-3 text-[var(--color-accent)]"
               >
-                <FileDown className="h-4 w-4" /> Download résumé
+                <FileDown className="h-4 w-4" /> Download resume
               </a>
             </li>
           </ul>

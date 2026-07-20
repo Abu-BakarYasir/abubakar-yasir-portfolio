@@ -10,7 +10,7 @@ export function Experience() {
       id="experience"
       className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
     >
-      <SectionHeading index="02" kicker="Experience" title="Where I've been building" />
+      <SectionHeading index="02" kicker="Experience" title="Where I've worked" />
 
       <div className="relative">
         {/* timeline spine */}

@@ -15,7 +15,8 @@ export default function NotFound() {
           Page not found
         </h1>
         <p className="mx-auto mt-4 max-w-sm text-[var(--color-fg-muted)]">
-          That page slipped through the retrieval pipeline. Let&apos;s get you back.
+          That link doesn&apos;t go anywhere. It may have moved, or it may never
+          have existed.
         </p>
         <Link
           href="/"

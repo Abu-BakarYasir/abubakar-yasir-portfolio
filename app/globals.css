@@ -442,6 +442,42 @@ body {
   display: block;
 }
 
+/* Carousel autoplay progress — the fill inside the active dot, showing how
+   long is left before the next slide. A CSS animation rather than a JS one so
+   that pausing is exact: animation-play-state freezes it mid-fill and resumes
+   from the same point, which a re-rendered motion component cannot do. The
+   duration is set inline from the same constant that drives the timer. */
+.autoplay-fill {
+  transform-origin: left;
+  animation: autoplay-fill linear forwards;
+}
+.autoplay-fill[data-paused="true"] {
+  animation-play-state: paused;
+}
+@keyframes autoplay-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Autoplay is off in this mode, so a countdown would be a lie. */
+  .autoplay-fill {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
+
+/* Mouse-drag scrolling on the project rail. Touch and trackpad already scroll
+   natively; this only adds the click-and-drag that a mouse otherwise lacks. */
+.rail-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
 /* Gradient text accent */
 .text-gradient {
   background: linear-gradient(100deg, var(--color-accent), var(--color-accent-2));

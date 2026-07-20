@@ -4,18 +4,20 @@ export const profile = {
   name: "Abu Bakar Yasir",
   firstName: "Abu Bakar",
   role: "Full-Stack & AI Engineer",
-  // Hero headline — human, specific, first-person (not "passionate developer" filler).
+  // Hero headline. Written to say something specific about the work rather
+  // than the usual "passionate developer" filler.
   tagline:
-    "I ship AI products end-to-end — from vector-retrieval pipelines and multi-agent orchestration to the deployed UI.",
+    "I build AI products from the database up to the screen people actually click. Right now that means RAG systems and multi-agent tooling at Spiral Lab.",
   location: "Lahore, Pakistan",
   timezone: "PKT · UTC+5",
-  availability: "Open to remote roles worldwide",
+  availability: "Open to remote work, anywhere",
   experienceYears: "1+ yr",
 
-  // Short About narrative — a couple of tight paragraphs.
+  // Short About narrative.
   about: [
-    "I'm a full-stack and AI engineer at Spiral Lab, where I've spent the last year shipping production systems that people actually depend on — multi-tenant SaaS platforms, retrieval-augmented generation pipelines, and multi-agent LLM orchestration.",
-    "I like owning a feature from the data model and async pipeline all the way through to the deployed interface. That means I'm as comfortable tuning a hybrid-retrieval RAG system for clinical safety as I am wiring up the frontend that makes it usable.",
+    "I'm a full-stack and AI engineer at Spiral Lab in Lahore. Over the past year I've worked on three products that are now in front of real users: a public affairs platform for UK consultancies, a healthcare monitoring SaaS, and a medical RAG system for clinical questions.",
+    "What I actually like is owning a feature all the way down. The schema, the background jobs, the retrieval layer, the API, and then the screen it ends up on. Most of the AI work I've done falls apart in the seams between those layers, so being able to move across all of them turns out to be the useful part.",
+    "I'm finishing a computer engineering degree at COMSATS alongside this, graduating in mid 2026.",
   ],
 
   contact: {
@@ -26,13 +28,16 @@ export const profile = {
     githubHandle: "Abu-BakarYasir",
     linkedin: "https://www.linkedin.com/in/abubakar-yasir-web-dev/",
     linkedinHandle: "abubakar-yasir-web-dev",
+    // Two cuts of the same CV: a plain one that survives résumé parsers, and a
+    // designed one for people who are actually going to look at it.
     resume: "/resume.pdf",
+    resumeVisual: "/resume-visual.pdf",
   },
 
   education: {
     degree: "BS Computer Engineering",
     school: "COMSATS University Islamabad (CUI)",
-    period: "Sep 2022 – Jun 2026",
+    period: "Sep 2022 - Jun 2026",
     detail: "CGPA 3.29 / 4.0 · Lahore, Pakistan",
   },
 } as const;
@@ -41,12 +46,12 @@ export const experience = [
   {
     company: "Spiral Lab",
     role: "Full-Stack & AI Engineer",
-    period: "Apr 2025 – Present",
+    period: "Apr 2025 - Present",
     link: "https://www.linkedin.com/company/spiral-lab1/posts/?feedView=all",
     points: [
-      "Shipped production-grade, full-stack applications end-to-end across 3+ products using Next.js, FastAPI, Django, Node.js, and Supabase/PostgreSQL — owning backend, AI layers, async pipelines, and frontend.",
-      "Built AI-driven systems including RAG pipelines and multi-agent LLM orchestration (OpenAI, Anthropic Claude, Groq), integrating vector databases (Qdrant, ChromaDB) for low-latency semantic retrieval.",
-      "Engineered secure, multi-tenant architectures with JWT auth, RBAC, row-level security, rate limiting, and audit logging, plus async pipelines (Django-Q2, Redis, WebSockets) deployed to Railway and Vercel with CI auto-deploy.",
+      "Worked across three products at the same time, owning the backend, the AI layer, the async pipelines and the frontend on each one. Mostly Next.js, FastAPI, Django, Node.js and Postgres via Supabase.",
+      "Built the AI side: retrieval pipelines and multi-agent orchestration on OpenAI, Claude and Groq, with Qdrant and ChromaDB handling vector search.",
+      "Did the load-bearing unglamorous parts too. JWT auth, role-based access, row-level security, rate limiting, audit logging, and background queues on Django-Q2 and Redis, deployed to Railway and Vercel with auto-deploy on push.",
     ],
   },
 ] as const;

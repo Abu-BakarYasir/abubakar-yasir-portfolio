@@ -8,7 +8,6 @@ import { GlassPanel } from "@/components/glass/GlassPanel";
 import { GlassButton } from "@/components/glass/GlassButton";
 import { ProjectGallery } from "@/components/ui/ProjectGallery";
 import { ProjectNav } from "@/components/ui/ProjectNav";
-import { ThemedImage } from "@/components/ui/ThemedImage";
 import { Reveal } from "@/components/motion/Reveal";
 
 export function generateStaticParams() {
@@ -25,7 +24,7 @@ export async function generateMetadata({
   if (!project) return {};
   return {
     title: project.title,
-    description: `${project.title} — ${project.tagline}. ${project.problem}`,
+    description: `${project.title}: ${project.tagline}. ${project.problem}`,
   };
 }
 
@@ -42,6 +41,10 @@ export default async function CaseStudy({
   // Wrap in both directions so the rail is a loop, never a dead end.
   const next = projects[(index + 1) % projects.length];
   const prev = projects[(index - 1 + projects.length) % projects.length];
+
+  const slides = project.cover
+    ? [project.cover, ...project.images]
+    : project.images;
 
   return (
     <>
@@ -99,28 +102,12 @@ export default async function CaseStudy({
           </div>
         </Reveal>
 
-        {/* Cover — designed key art, framed like a gallery slide so the two
-            read as one stack. The real screenshots follow below it. */}
-        {project.cover && (
+        {/* Gallery — the designed cover leads, then the real screenshots. One
+            carousel rather than a cover block stacked above a second gallery,
+            so there is a single place to look. */}
+        {slides.length > 0 ? (
           <Reveal className="mt-14" y={28}>
-            <div className="glass relative overflow-hidden rounded-2xl p-1.5">
-              <div className="relative aspect-[16/9] overflow-hidden rounded-xl">
-                <ThemedImage
-                  image={project.cover}
-                  fill
-                  priority
-                  sizes="(max-width: 896px) 100vw, 896px"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </Reveal>
-        )}
-
-        {/* Gallery */}
-        {project.images.length > 0 ? (
-          <Reveal className={project.cover ? "mt-8" : "mt-14"} y={28}>
-            <ProjectGallery images={project.images} />
+            <ProjectGallery images={slides} />
           </Reveal>
         ) : (
           <Reveal className="mt-14">

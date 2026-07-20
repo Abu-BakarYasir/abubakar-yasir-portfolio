@@ -9,7 +9,7 @@ export function Skills() {
       <SectionHeading
         index="04"
         kicker="Toolkit"
-        title="Languages, frameworks & infrastructure"
+        title="What I work with"
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

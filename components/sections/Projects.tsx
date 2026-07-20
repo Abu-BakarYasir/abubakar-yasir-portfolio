@@ -12,7 +12,7 @@ export function Projects() {
       <SectionHeading
         index="03"
         kicker="Selected work"
-        title="Things I've built and shipped"
+        title="What I've built"
       />
 
       {/* Flagship case studies — a horizontal rail rather than a tall grid */}

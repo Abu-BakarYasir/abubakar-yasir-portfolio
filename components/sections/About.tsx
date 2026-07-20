@@ -5,15 +5,15 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/motion/Reveal";
 
 const stats = [
-  { value: "1+", label: "yr shipping production" },
-  { value: "3", label: "live SaaS products" },
+  { value: "1+", label: "year writing production code" },
+  { value: "3", label: "products live with real users" },
   { value: "4+", label: "AI systems built" },
 ];
 
 export function About() {
   return (
     <section id="about" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32">
-      <SectionHeading index="01" kicker="About" title="Engineer who ships the whole stack" />
+      <SectionHeading index="01" kicker="About" title="How I work" />
 
       <div className="grid gap-10 lg:grid-cols-12">
         <div className="lg:col-span-7">

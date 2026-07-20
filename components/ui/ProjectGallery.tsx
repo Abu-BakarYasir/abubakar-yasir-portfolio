@@ -1,11 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { ProjectImage } from "@/content/projects";
+import { ThemedImage } from "@/components/ui/ThemedImage";
+import { useAutoplay } from "@/lib/useAutoplay";
 import { cn } from "@/lib/utils";
+
+/** Longer than the home rail's interval: these are dense screenshots, and a
+ *  full-page capture takes a moment to take in. */
+const AUTOPLAY_MS = 4000;
 
 /** Slide direction follows navigation: forward enters from the right. */
 const slideVariants = {
@@ -15,12 +20,13 @@ const slideVariants = {
 };
 
 /**
- * Case-study screenshot gallery: one framed slide with prev/next controls and
- * a thumbnail strip, so a six-shot gallery costs one viewport instead of six.
+ * Case-study image carousel: the designed cover and the real screenshots in a
+ * single stage, so the page has one place to look rather than two stacked
+ * image blocks.
  *
- * Slides are `object-contain` inside a fixed-height stage — the captures range
- * from 1440x900 to 1425x2670, and cropping a tall full-page shot to a uniform
- * box would hide most of it.
+ * Slides are `object-contain` inside a stage sized to the active shot — the
+ * images range from a 16:9 cover to a 1425x2670 full-page capture, and
+ * cropping those to one uniform box would hide most of the tall ones.
  */
 export function ProjectGallery({ images }: { images: ProjectImage[] }) {
   const count = images.length;
@@ -36,6 +42,13 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
 
   const prev = useCallback(() => go(index - 1, -1), [go, index]);
   const next = useCallback(() => go(index + 1, 1), [go, index]);
+
+  const { running, holdProps, setHeld } = useAutoplay({
+    delay: AUTOPLAY_MS,
+    resetKey: index,
+    enabled: count > 1,
+    onAdvance: next,
+  });
 
   // Centre the active thumbnail by scrolling the strip itself. `scrollIntoView`
   // would also scroll the page, yanking the reader down to the gallery on load.
@@ -57,7 +70,8 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
   const active = images[index];
   // Size the stage to the active shot: wide captures fill it with no dead
   // space, tall ones stay as large as the cap allows instead of shrinking to
-  // fit a landscape box.
+  // fit a landscape box. Transitioned, because the cover and a full-page
+  // screenshot are very different shapes and an instant jump is jarring.
   const ratio = active ? (active.width ?? 16) / (active.height ?? 9) : 16 / 9;
 
   if (count === 0) return null;
@@ -67,8 +81,9 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
       className="group/gallery relative"
       role="region"
       aria-roledescription="carousel"
-      aria-label="Project screenshots"
+      aria-label="Project images"
       tabIndex={0}
+      {...holdProps}
       onKeyDown={(e) => {
         if (e.key === "ArrowLeft") {
           e.preventDefault();
@@ -79,11 +94,27 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
         }
       }}
     >
+      <div className="mb-4 flex items-center justify-between gap-4">
+        <p className="font-mono text-xs text-[var(--color-fg-faint)]">
+          Drag, swipe or use the arrows
+        </p>
+        {count > 1 && (
+          <span className="font-mono text-[11px] text-[var(--color-fg-faint)]">
+            {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+          </span>
+        )}
+      </div>
+
       {/* Stage */}
       <div className="glass relative overflow-hidden rounded-2xl p-1.5">
         <div
           className="relative mx-auto w-full overflow-hidden rounded-xl bg-[color-mix(in_oklab,var(--color-fg)_4%,transparent)]"
-          style={{ aspectRatio: ratio, maxHeight: "78vh", minHeight: "260px" }}
+          style={{
+            aspectRatio: ratio,
+            maxHeight: "78vh",
+            minHeight: "260px",
+            transition: "aspect-ratio 420ms var(--ease-out-expo)",
+          }}
         >
           <AnimatePresence initial={false} custom={direction} mode="popLayout">
             <motion.div
@@ -98,14 +129,17 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
               drag={count > 1 ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.18}
+              // A drag can outlast the pointer leaving the stage, so release the
+              // autoplay hold explicitly rather than trusting pointerleave.
+              onDragStart={() => setHeld(true)}
               onDragEnd={(_, info) => {
+                setHeld(false);
                 if (info.offset.x < -60) next();
                 else if (info.offset.x > 60) prev();
               }}
             >
-              <Image
-                src={active.src}
-                alt={active.alt}
+              <ThemedImage
+                image={active}
                 fill
                 sizes="(max-width: 896px) 100vw, 896px"
                 className="object-contain object-top"
@@ -119,8 +153,17 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
             <>
               <Arrow side="left" onClick={prev} />
               <Arrow side="right" onClick={next} />
-              <span className="pointer-events-none absolute right-3 top-3 rounded-full border border-[var(--color-glass-border)] bg-[color-mix(in_oklab,var(--color-bg)_70%,transparent)] px-2.5 py-1 font-mono text-[11px] text-[var(--color-fg-muted)] backdrop-blur-md">
-                {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+              {/* Autoplay countdown, hairline across the bottom of the stage.
+                  Remounts with each slide, which restarts the fill. */}
+              <span
+                key={index}
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] overflow-hidden"
+              >
+                <span
+                  className="autoplay-fill block h-full bg-[var(--color-accent)]"
+                  style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
+                  data-paused={!running}
+                />
               </span>
             </>
           )}
@@ -155,7 +198,7 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
               type="button"
               data-thumb={i}
               onClick={() => go(i, i > index ? 1 : -1)}
-              aria-label={`Go to screenshot ${i + 1}: ${img.alt}`}
+              aria-label={`Go to image ${i + 1}: ${img.alt}`}
               aria-current={i === index}
               className={cn(
                 "relative h-16 w-24 shrink-0 snap-start overflow-hidden rounded-lg border transition-all duration-300",
@@ -164,9 +207,8 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
                   : "border-[var(--color-glass-border)] opacity-45 hover:opacity-80",
               )}
             >
-              <Image
-                src={img.src}
-                alt=""
+              <ThemedImage
+                image={{ ...img, alt: "" }}
                 fill
                 sizes="96px"
                 className="object-cover object-top"
@@ -185,7 +227,7 @@ function Arrow({ side, onClick }: { side: "left" | "right"; onClick: () => void 
     <button
       type="button"
       onClick={onClick}
-      aria-label={side === "left" ? "Previous screenshot" : "Next screenshot"}
+      aria-label={side === "left" ? "Previous image" : "Next image"}
       className={cn(
         "absolute top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full",
         "border border-[var(--color-glass-border)] bg-[color-mix(in_oklab,var(--color-bg)_70%,transparent)]",
