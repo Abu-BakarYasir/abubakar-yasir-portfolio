@@ -135,6 +135,12 @@
 
 html {
   scroll-behavior: smooth;
+  /* Safety net against horizontal overflow at the true root. The known
+     offender (the aurora orbs) is contained at its own layer; this is a
+     backstop so a future stray-wide element can't silently reintroduce the
+     mobile shrink-to-fit. `clip`, not `hidden`, so the root never becomes a
+     scroll container — sticky positioning and smooth-scroll keep working. */
+  overflow-x: clip;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -264,6 +270,15 @@ body {
   position: absolute;
   inset: 0;
   z-index: 0;
+  /* The orbs are sized in vw and parked with negative offsets, so they spill a
+     good 12vw past each edge. clip-path hides that paint, but the boxes still
+     count toward document width — 12vw of phantom horizontal overflow that made
+     mobile browsers shrink the whole page to fit. `overflow: clip` contains the
+     layout overflow too. It has to be `clip`, not `hidden`: `hidden` would make
+     this a scroll container and pin the sticky stage below to it, whereas `clip`
+     leaves the stage sticking to the viewport as intended. clip-path stays for
+     the rounded/inset paint edge. */
+  overflow: clip;
   clip-path: inset(0);
   pointer-events: none;
 }

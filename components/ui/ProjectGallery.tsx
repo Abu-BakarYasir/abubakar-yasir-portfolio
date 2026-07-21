@@ -217,6 +217,38 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
           ))}
         </div>
       )}
+
+      {/* Dot slider, the same pill as the home rail. The active dot doubles as
+          the autoplay countdown, so it restarts its fill whenever the slide
+          changes. Sits under the thumbnails as a second, glanceable read of
+          how far through the set you are. */}
+      {count > 1 && (
+        <div className="mt-4 flex items-center justify-center gap-2">
+          {images.map((_, i) =>
+            i === index ? (
+              <span
+                key={i}
+                aria-hidden
+                className="relative block h-1.5 w-8 overflow-hidden rounded-full bg-[var(--color-glass-border)]"
+              >
+                <span
+                  className="autoplay-fill absolute inset-0 rounded-full bg-[var(--color-accent)]"
+                  style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
+                  data-paused={!running}
+                />
+              </span>
+            ) : (
+              <button
+                key={i}
+                type="button"
+                onClick={() => go(i, i > index ? 1 : -1)}
+                aria-label={`Go to image ${i + 1} of ${count}`}
+                className="h-1.5 w-1.5 rounded-full bg-[var(--color-glass-border)] transition-all duration-300 hover:bg-[var(--color-fg-faint)]"
+              />
+            ),
+          )}
+        </div>
+      )}
     </div>
   );
 }
