@@ -8,7 +8,7 @@ import { Reveal } from "@/components/motion/Reveal";
 // Full contact channels (email, phone, socials) live in the footer.
 export function Contact() {
   return (
-    <section id="contact" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32">
+    <section id="contact" className="mx-auto max-w-[1440px] scroll-mt-24 px-6 py-24 md:py-32">
       <SectionHeading index="05" kicker="Contact" title="Get in touch" />
 
       <Reveal y={28}>

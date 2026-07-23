@@ -8,7 +8,7 @@ export function Projects() {
   const featured = projects.filter((p) => p.featured);
 
   return (
-    <section id="projects" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32">
+    <section id="projects" className="mx-auto max-w-[1440px] scroll-mt-24 px-6 py-24 md:py-32">
       <SectionHeading
         index="03"
         kicker="Selected work"

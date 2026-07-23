@@ -12,7 +12,7 @@ const stats = [
 
 export function About() {
   return (
-    <section id="about" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32">
+    <section id="about" className="mx-auto max-w-[1440px] scroll-mt-24 px-6 py-24 md:py-32">
       <SectionHeading index="01" kicker="About" title="How I work" />
 
       <div className="grid gap-10 lg:grid-cols-12">

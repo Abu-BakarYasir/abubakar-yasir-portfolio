@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
 
 export function Hero() {
   return (
-    <section className="relative mx-auto flex min-h-dvh max-w-6xl flex-col justify-center px-6 pt-28 pb-16">
+    <section className="relative mx-auto flex min-h-dvh max-w-[1440px] flex-col justify-center px-6 pt-28 pb-16">
       <div className="grid items-center gap-12 lg:grid-cols-12">
         {/* Left — headline */}
         <div className="lg:col-span-7">

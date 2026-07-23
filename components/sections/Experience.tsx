@@ -8,11 +8,15 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="mx-auto max-w-6xl scroll-mt-24 px-6 py-24 md:py-32"
+      className="mx-auto max-w-[1440px] scroll-mt-24 px-6 py-24 md:py-32"
     >
       <SectionHeading index="02" kicker="Experience" title="Where I've worked" />
 
-      <div className="relative">
+      {/* Capped narrower than the section: the widened container is good for
+          grids, but a single column of prose that runs the full 1440px is a
+          punishing line length. The timeline sits left-aligned under the
+          heading instead. */}
+      <div className="relative max-w-4xl">
         {/* timeline spine */}
         <span className="absolute left-[7px] top-2 bottom-2 w-px bg-[linear-gradient(180deg,var(--color-accent),transparent)] md:left-[7px]" />
 

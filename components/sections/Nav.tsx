@@ -59,7 +59,7 @@ export function Nav() {
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
         <nav
           className={cn(
-            "flex w-full max-w-5xl items-center justify-between gap-4 rounded-full px-4 py-2.5 transition-all duration-500 ease-[var(--ease-out-expo)]",
+            "flex w-full max-w-[1280px] items-center justify-between gap-4 rounded-full px-4 py-2.5 transition-all duration-500 ease-[var(--ease-out-expo)]",
             scrolled
               ? "glass border-[var(--color-glass-border)]"
               : "border border-transparent",
@@ -122,7 +122,7 @@ export function Nav() {
 
         {/* scroll progress */}
         <motion.div
-          className="absolute inset-x-0 -bottom-px mx-auto h-px max-w-5xl origin-left bg-[linear-gradient(90deg,var(--color-accent),var(--color-accent-2))]"
+          className="absolute inset-x-0 -bottom-px mx-auto h-px max-w-[1280px] origin-left bg-[linear-gradient(90deg,var(--color-accent),var(--color-accent-2))]"
           style={{ scaleX: progress }}
         />
       </header>
