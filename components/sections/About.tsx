@@ -12,7 +12,10 @@ const stats = [
 
 export function About() {
   return (
-    <section id="about" className="mx-auto max-w-[1240px] scroll-mt-24 px-6 py-16 md:px-10 md:py-20">
+    <section
+      id="about"
+      className="mx-auto max-w-[1240px] scroll-mt-[calc(var(--nav-h)+1.25rem)] px-6 py-12 md:px-10 md:py-20"
+    >
       <SectionHeading index="01" kicker="About" title="How I work" />
 
       <div className="grid gap-10 lg:grid-cols-12">
@@ -26,16 +29,23 @@ export function About() {
           ))}
 
           <Reveal delay={0.2}>
-            <div className="mt-8 grid grid-cols-3 gap-4">
+            {/* Below 420px these become one line each — value and label side by
+                side — rather than three ~85px columns. Forced into thirds on a
+                320px screen, "year writing production code" broke over five
+                ragged lines and read as a layout bug. */}
+            <div className="mt-8 grid gap-3 min-[420px]:grid-cols-3 min-[420px]:gap-4">
               {stats.map((s) => (
-                <div key={s.label}>
+                <div
+                  key={s.label}
+                  className="flex items-baseline gap-3 min-[420px]:block"
+                >
                   <div
-                    className="font-display font-bold text-gradient"
+                    className="shrink-0 font-display font-bold text-gradient"
                     style={{ fontSize: "var(--text-h3)" }}
                   >
                     {s.value}
                   </div>
-                  <div className="mt-1 text-xs leading-snug text-[var(--color-fg-faint)]">
+                  <div className="text-xs leading-snug text-[var(--color-fg-faint)] min-[420px]:mt-1">
                     {s.label}
                   </div>
                 </div>

@@ -9,7 +9,10 @@ export function Projects() {
   const featured = projects.filter((p) => p.featured);
 
   return (
-    <section id="projects" className="mx-auto max-w-[1240px] scroll-mt-24 px-6 py-16 md:px-10 md:py-20">
+    <section
+      id="projects"
+      className="mx-auto max-w-[1240px] scroll-mt-[calc(var(--nav-h)+1.25rem)] px-6 py-12 md:px-10 md:py-20"
+    >
       <SectionHeading
         index="03"
         kicker="Selected work"
