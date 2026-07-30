@@ -18,19 +18,20 @@ export function Contact() {
               className="font-display font-semibold leading-tight"
               style={{ fontSize: "var(--text-h3)" }}
             >
-              I'm looking for remote work.
+              Available for remote work.
             </h3>
             <p className="mx-auto mt-4 max-w-md leading-relaxed text-[var(--color-fg-muted)]">
-              If you're hiring for AI or full-stack work, or you have something
-              half-built that needs finishing, send me an email. I'm in{" "}
-              {profile.location} on {profile.timezone} and I keep hours that
-              overlap with the US and Europe.
+              Hiring for AI or full-stack work, or sitting on a half-built
+              product that needs someone to finish it properly? Those are the
+              projects worth a conversation. Based in {profile.location} on{" "}
+              {profile.timezone}, keeping hours that overlap both the US and
+              Europe.
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <GlassButton href={`mailto:${profile.contact.email}`} variant="primary">
                 <Mail className="h-4 w-4" />
-                Email me
+                Start a conversation
               </GlassButton>
               <GlassButton href={profile.contact.resume} variant="glass">
                 <FileDown className="h-4 w-4" />

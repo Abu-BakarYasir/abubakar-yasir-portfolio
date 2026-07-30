@@ -59,7 +59,7 @@ export const projects: Project[] = [
       "Docker",
     ],
     problem:
-      "A clinician can't act on an answer they have no way to check. General-purpose models will happily invent a citation, and in medicine that isn't a cosmetic bug. I wanted something that answers clinical questions with the evidence attached, and that admits when the evidence is thin instead of filling the gap.",
+      "A clinician can't act on an answer they have no way to check. General-purpose models will happily invent a citation, and in medicine that isn't a cosmetic bug. The system had to answer clinical questions with the evidence attached, and admit when that evidence is thin instead of papering over the gap.",
     approach: [
       "Built the retrieval layer as three systems running side by side: dense vectors from PubMedBERT in Qdrant, sparse BM25 keyword search, and a Neo4j knowledge graph over UMLS. Reciprocal Rank Fusion merges the three result sets into a single ranking, so a result has to do well on more than one axis to reach the top.",
       "Added a CRAG self-evaluation loop. Before it generates anything, the system grades what it retrieved, and if confidence is low it rewrites the query and goes back rather than answering from weak context.",

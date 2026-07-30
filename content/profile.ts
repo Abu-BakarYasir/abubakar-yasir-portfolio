@@ -7,7 +7,7 @@ export const profile = {
   // Hero headline. Written to say something specific about the work rather
   // than the usual "passionate developer" filler.
   tagline:
-    "I build AI products from the database all the way up to the screen people actually use. Right now that means RAG systems and multi-agent tooling at Spiral Lab.",
+    "AI products, built full-stack from the database all the way up to the screen people actually use. Right now, that means RAG systems and multi-agent tooling at Spiral Lab.",
   location: "Lahore, Pakistan",
   timezone: "PKT · UTC+5",
   availability: "Open to remote work, anywhere",
