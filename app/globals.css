@@ -11,10 +11,17 @@
   --font-sans: var(--ff-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--ff-mono), ui-monospace, "SF Mono", monospace;
 
-  /* Fluid type scale */
-  --text-hero: clamp(2.25rem, 4.4vw, 3.75rem);
-  --text-h2: clamp(1.5rem, 2.8vw, 2.1rem);
-  --text-h3: clamp(1.1rem, 1.7vw, 1.35rem);
+  /* Fluid type scale.
+     Each ramp is solved between 320px and 1240px (the content cap) rather than
+     from 0, so the type actually *moves* across the phone/tablet range. The old
+     bare-vw ramps hit their floor at ~820px, which meant every screen from a
+     320px SE to a 430px Pro Max rendered identical type. */
+  --text-hero: clamp(2.25rem, 1.728rem + 2.61vw, 3.75rem);
+  --text-h2: clamp(1.5rem, 1.291rem + 1.04vw, 2.1rem);
+  --text-h3: clamp(1.1rem, 1.013rem + 0.43vw, 1.35rem);
+  /* Card-level headings (job roles, project titles) — previously hardcoded
+     text-xl, which left them larger than the section title they sat under. */
+  --text-h4: clamp(1.0625rem, 1.005rem + 0.29vw, 1.25rem);
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -30,12 +37,22 @@
 :root {
   color-scheme: dark;
 
+  /* Measured height of the floating nav, including the 1rem it is inset from
+     the top. Sections derive their scroll-margin from this so an anchor jump
+     lands with the same gap on every breakpoint — previously a flat
+     scroll-mt-24 was guessing, and guessed differently per screen. Mobile is
+     taller because the menu button is a full 44px touch target. */
+  --nav-h: 4.75rem;
+
   /* Surfaces — warm near-black */
   --color-bg: #14100b;
   --color-bg-elev: #1e1810;
   --color-fg: #ede4d3;
   --color-fg-muted: #b3a88f;
-  --color-fg-faint: #857a63;
+  /* Was #857a63 — 4.5:1, i.e. exactly on the AA line, at the 11-12px sizes this
+     token is actually used for (kickers, captions, meta bars). Lifted to ~5.9:1
+     so the smallest text on the page has real headroom. */
+  --color-fg-faint: #9a8e76;
 
   /* Accents — molten amber & burnt sienna */
   --color-accent: #e8a73c;        /* molten amber / gold */
@@ -133,6 +150,12 @@
   border-color: var(--color-glass-border);
 }
 
+@media (min-width: 768px) {
+  :root {
+    --nav-h: 4.25rem;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   /* Safety net against horizontal overflow at the true root. The known
@@ -147,6 +170,30 @@ html {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* Smooth scroll is pleasant over a desktop viewport-height jump; over a mobile
+   page that is many viewports tall it turns "back to top" into a long ride with
+   no way to abort. Phones get the instant jump. */
+@media (max-width: 767px) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Widows and orphans are far more visible at phone measure than at desktop, so
+   these are global rather than breakpoint-scoped. `balance` is capped by the UA
+   at ~6 lines, which is why body copy gets `pretty` instead. */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+p,
+li {
+  text-wrap: pretty;
 }
 
 body {
@@ -206,7 +253,7 @@ body {
    3.7:1 against it. Re-base the token on this surface rather than lightening
    it everywhere. Light mode needs no override — its footer is lighter still. */
 :root:not([data-theme="light"]) .site-footer {
-  --color-fg-faint: #9b8f77;
+  --color-fg-faint: #b0a48c;
 }
 
 /* Reveal mode. <FooterHeightSync /> adds .footer-reveal to <html> only when
@@ -249,6 +296,25 @@ body {
   background: color-mix(in oklab, var(--color-accent-2) 40%, var(--color-bg-elev));
   border-radius: 999px;
   border: 2px solid var(--color-bg);
+}
+
+/* ============================================================
+   Touch-target expander.
+
+   Several controls here are deliberately tiny as *marks* — the 6px carousel
+   dots, the 28px-tall theme switch, the 32px icon buttons on a project card.
+   Growing them to the 44px WCAG target would wreck the composition, so instead
+   an invisible centred pseudo-element carries the hit area while the visible
+   mark keeps its size. The host must be `position: relative` (or absolute).
+   ============================================================ */
+.hit-target::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
 }
 
 /* Focus ring — accessible, on-brand */
@@ -295,7 +361,7 @@ body {
   content: "";
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  filter: blur(var(--aurora-blur, 80px));
   opacity: var(--aurora-opacity);
   will-change: transform;
 }
@@ -322,11 +388,35 @@ body {
   width: 34vw;
   height: 34vw;
   border-radius: 50%;
-  filter: blur(90px);
+  filter: blur(var(--aurora-orb-blur, 90px));
   opacity: var(--aurora-orb-opacity);
   background: radial-gradient(circle at 50% 50%, #9a5626, transparent 60%);
   animation: drift-c 38s var(--ease-in-out-expo) infinite alternate;
   will-change: transform;
+}
+
+/* The orbs are sized in vw but were blurred by a fixed 80-90px. At 375px wide
+   that is a ~206px orb under an 80px blur — the blur radius approaches the orb
+   radius and the intended soft ambient wash collapses into mush. Scale the orbs
+   up and the blur down together so the *ratio* stays close to the desktop look,
+   which is also markedly cheaper to composite. */
+@media (max-width: 767px) {
+  :root {
+    --aurora-blur: 44px;
+    --aurora-orb-blur: 52px;
+  }
+  .aurora-stage::before {
+    width: 92vw;
+    height: 92vw;
+  }
+  .aurora-stage::after {
+    width: 84vw;
+    height: 84vw;
+  }
+  .aurora-orb {
+    width: 62vw;
+    height: 62vw;
+  }
 }
 
 @keyframes drift-a {
@@ -370,8 +460,8 @@ body {
    ============================================================ */
 .glass {
   background: var(--color-glass);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur, 16px)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 16px)) saturate(160%);
   border: 1px solid var(--color-glass-border);
   box-shadow:
     inset 0 1px 0 0 var(--glass-hi-top),
@@ -386,6 +476,24 @@ body {
 @supports (backdrop-filter: url(#x)) {
   .glass-refract {
     backdrop-filter: url(#liquid-glass) blur(6px) saturate(160%);
+  }
+}
+
+/* Every card, panel, pill and button on this page is a `.glass` surface, and
+   each one is a separate backdrop-filter pass over a moving aurora. That is
+   affordable on a desktop GPU and is the main source of scroll jank on
+   mid-range Android. Phones get a cheaper blur, and the SVG refraction — which
+   is the most expensive layer and the least visible at this size — comes off
+   entirely. The frost still reads; it just costs a fraction as much. */
+@media (max-width: 767px) {
+  :root {
+    --glass-blur: 8px;
+  }
+
+  @supports (backdrop-filter: url(#x)) {
+    .glass-refract {
+      backdrop-filter: blur(var(--glass-blur, 8px)) saturate(160%);
+    }
   }
 }
 
@@ -513,14 +621,31 @@ body {
     transform: translateX(-50%);
   }
 }
-/* No motion: drop the animation and let the row be scrolled by hand instead,
-   so the repos hidden off-screen stay reachable. */
-@media (prefers-reduced-motion: reduce) {
+/* Drop the animation and let the row be scrolled by hand instead, so the repos
+   hidden off-screen stay reachable.
+   `(hover: none)` is in here alongside reduced-motion because the pause rule
+   above is hover/focus-driven, and a touch device can satisfy neither: the
+   strip would slide forever, so a repo card could never be finished reading and
+   every tap target would be moving under the finger. */
+@media (prefers-reduced-motion: reduce), (hover: none) {
   .gh-marquee {
     overflow-x: auto;
+    scroll-snap-type: x proximity;
+    /* Cancels the -mx-6 bleed the animated version relies on, so in scroll mode
+       the first card lines up with the section's own gutter. */
+    padding-inline: 1.5rem;
+    scroll-padding-left: 1.5rem;
   }
   .gh-marquee-track {
     animation: none;
+  }
+  .gh-marquee-item {
+    scroll-snap-align: start;
+  }
+  /* The second pass exists only to hide the loop seam. With no loop running it
+     is just every repo listed a second time. */
+  .gh-marquee-dupe {
+    display: none;
   }
 }
 
@@ -530,6 +655,16 @@ body {
   cursor: grabbing;
   scroll-snap-type: none;
   user-select: none;
+}
+
+/* The "next project" card reveals its cover art on hover. A touch device can
+   never trigger that, so the card — whose entire visual idea is the reveal —
+   rendered as an empty box on every phone. Show it standing, dimmed enough that
+   the headline over it stays legible. */
+@media (hover: none) {
+  .project-nav-cover {
+    opacity: 0.35;
+  }
 }
 
 /* Gradient text accent */
@@ -565,6 +700,13 @@ body {
 }
 .theme-toggle:hover {
   background: var(--color-glass-strong);
+}
+/* The switch is 54x28 by design; 28px tall is well under the 44px touch
+   minimum. Expand the hit area without touching the visual size. */
+.theme-toggle::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
 }
 
 .tt-knob {
