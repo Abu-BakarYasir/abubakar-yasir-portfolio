@@ -6,7 +6,7 @@ import { Reveal } from "@/components/motion/Reveal";
 
 export function Hero() {
   return (
-    <section className="relative mx-auto flex min-h-dvh max-w-[1440px] flex-col justify-center px-6 pt-28 pb-16">
+    <section className="relative mx-auto flex min-h-dvh max-w-[1600px] flex-col justify-center px-6 pt-28 pb-16 md:px-10">
       <div className="grid items-center gap-12 lg:grid-cols-12">
         {/* Left — headline */}
         <div className="lg:col-span-7">
@@ -39,7 +39,7 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.18}>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--color-fg-muted)]">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-fg-muted)] md:text-xl">
               {profile.tagline}
             </p>
           </Reveal>

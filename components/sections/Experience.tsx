@@ -8,7 +8,7 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="mx-auto max-w-[1440px] scroll-mt-24 px-6 py-24 md:py-32"
+      className="mx-auto max-w-[1600px] scroll-mt-24 px-6 py-24 md:px-10 md:py-32"
     >
       <SectionHeading index="02" kicker="Experience" title="Where I've worked" />
 
