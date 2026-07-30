@@ -21,11 +21,10 @@ export function Contact() {
               Available for remote work.
             </h3>
             <p className="mx-auto mt-4 max-w-md leading-relaxed text-[var(--color-fg-muted)]">
-              Hiring for AI or full-stack work, or sitting on a half-built
-              product that needs someone to finish it properly? Those are the
-              projects worth a conversation. Based in {profile.location} on{" "}
-              {profile.timezone}, keeping hours that overlap both the US and
-              Europe.
+              Best fit for teams building serious AI or full-stack products, and
+              for founders sitting on something half-built that needs to actually
+              ship. Based in {profile.location} on {profile.timezone}, working
+              hours that overlap the US and Europe.
             </p>
 
             <div className="mt-8 flex flex-wrap justify-center gap-3">
