@@ -8,6 +8,7 @@ import { GlassPanel } from "@/components/glass/GlassPanel";
 import { GlassButton } from "@/components/glass/GlassButton";
 import { ProjectGallery } from "@/components/ui/ProjectGallery";
 import { ProjectNav } from "@/components/ui/ProjectNav";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Reveal } from "@/components/motion/Reveal";
 
 export function generateStaticParams() {
@@ -48,23 +49,28 @@ export default async function CaseStudy({
 
   return (
     <>
-      {/* Minimal top bar */}
+      {/* Minimal top bar. max-w-[1240px] to match the home nav — it was max-w-5xl
+          here, so the bar visibly changed width on navigation. */}
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
-        <div className="glass flex w-full max-w-5xl items-center justify-between rounded-full px-4 py-2.5">
+        <div className="glass flex w-full max-w-[1240px] items-center justify-between gap-3 rounded-full px-4 py-2 sm:py-2.5">
           <Link
             href="/#projects"
-            className="inline-flex items-center gap-2 text-sm text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-fg)]"
+            className="inline-flex min-w-0 items-center gap-2 py-1.5 text-sm text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-fg)]"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 shrink-0" />
             All work
           </Link>
-          <Link href="/" className="font-display text-sm font-semibold">
-            {profile.firstName}
-          </Link>
+          <div className="flex shrink-0 items-center gap-3">
+            <Link href="/" className="font-display text-sm font-semibold">
+              {profile.firstName}
+            </Link>
+            {/* Was missing entirely here, so switching theme meant going home. */}
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-6 pt-32 pb-24">
+      <main className="mx-auto max-w-4xl px-6 pt-[calc(var(--nav-h)+2rem)] pb-20 sm:pt-32 sm:pb-24">
         {/* Hero */}
         <Reveal>
           <div className="flex flex-wrap items-center gap-3">
@@ -82,19 +88,27 @@ export default async function CaseStudy({
           >
             {project.title}
           </h1>
-          <p className="mt-3 text-lg text-[var(--color-fg-muted)]">
+          <p className="mt-3 text-base text-[var(--color-fg-muted)] sm:text-lg">
             {project.tagline}
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             {project.liveUrl && (
-              <GlassButton href={project.liveUrl} variant="primary">
+              <GlassButton
+                href={project.liveUrl}
+                variant="primary"
+                className="w-full sm:w-auto"
+              >
                 <ExternalLink className="h-4 w-4" />
                 Visit live site
               </GlassButton>
             )}
             {project.repoUrl && (
-              <GlassButton href={project.repoUrl} variant="glass">
+              <GlassButton
+                href={project.repoUrl}
+                variant="glass"
+                className="w-full sm:w-auto"
+              >
                 <Github className="h-4 w-4" />
                 Source
               </GlassButton>
@@ -106,12 +120,12 @@ export default async function CaseStudy({
             carousel rather than a cover block stacked above a second gallery,
             so there is a single place to look. */}
         {slides.length > 0 ? (
-          <Reveal className="mt-14" y={28}>
+          <Reveal className="mt-10 sm:mt-14" y={28}>
             <ProjectGallery images={slides} />
           </Reveal>
         ) : (
-          <Reveal className="mt-14">
-            <GlassPanel className="grid place-items-center p-12 text-center">
+          <Reveal className="mt-10 sm:mt-14">
+            <GlassPanel className="grid place-items-center p-8 text-center sm:p-12">
               <p className="font-mono text-sm text-[var(--color-fg-muted)]">
                 {project.imagesPending
                   ? "Screenshots coming soon."
@@ -122,10 +136,10 @@ export default async function CaseStudy({
         )}
 
         {/* Body */}
-        <div className="mt-16 grid gap-12">
+        <div className="mt-12 grid gap-10 sm:mt-16 sm:gap-12">
           <Reveal>
             <Block label="The problem">
-              <p className="text-lg leading-relaxed text-[var(--color-fg-muted)]">
+              <p className="text-base leading-relaxed text-[var(--color-fg-muted)] sm:text-lg">
                 {project.problem}
               </p>
             </Block>

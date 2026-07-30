@@ -14,7 +14,7 @@ export function ProjectNav({ prev, next }: { prev: Project; next: Project }) {
   const cover = next.cover ?? next.images[0];
 
   return (
-    <nav aria-label="More projects" className="mt-24">
+    <nav aria-label="More projects" className="mt-16 sm:mt-24">
       <Link
         href={`/projects/${next.slug}`}
         className="group relative block overflow-hidden rounded-3xl border border-[var(--color-glass-border)] bg-[var(--color-glass)] transition-all duration-500 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)] hover:shadow-[var(--shadow-card-hover)]"
@@ -23,7 +23,10 @@ export function ProjectNav({ prev, next }: { prev: Project; next: Project }) {
         {cover && (
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-0 transition-all duration-700 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:opacity-100"
+            // `project-nav-cover` gives touch devices a permanent low-opacity
+            // version of this. The reveal is the card's whole visual idea, and
+            // hover-only meant every phone got a plain empty box.
+            className="project-nav-cover pointer-events-none absolute inset-0 opacity-0 transition-all duration-700 ease-[var(--ease-out-expo)] group-hover:scale-105 group-hover:opacity-100"
           >
             {/* Decorative — the wrapper is aria-hidden, so the alt is cleared
                 rather than repeating the cover description behind the title. */}
@@ -38,9 +41,11 @@ export function ProjectNav({ prev, next }: { prev: Project; next: Project }) {
           </div>
         )}
 
-        <div className="relative flex items-center justify-between gap-6 p-8 md:p-10">
+        {/* p-8 plus a 48px circle plus gap-6 left about 136px for the title at
+            320px, and the tagline was cut to roughly fifteen characters. */}
+        <div className="relative flex items-center justify-between gap-4 p-5 sm:gap-6 sm:p-8 md:p-10">
           <div className="min-w-0">
-            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--color-fg-faint)]">
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--color-fg-faint)] sm:text-[11px] sm:tracking-[0.22em]">
               Next project
             </span>
             <h2
@@ -49,12 +54,14 @@ export function ProjectNav({ prev, next }: { prev: Project; next: Project }) {
             >
               {next.title}
             </h2>
-            <p className="mt-1.5 truncate text-sm text-[var(--color-fg-muted)]">
+            {/* Two lines instead of one hard truncation — at this width `truncate`
+                threw away most of the sentence it was meant to preview. */}
+            <p className="mt-1.5 line-clamp-2 text-sm text-[var(--color-fg-muted)]">
               {next.tagline}
             </p>
           </div>
 
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[var(--color-glass-border)] bg-[var(--color-glass)] text-[var(--color-fg-muted)] transition-all duration-300 group-hover:border-transparent group-hover:bg-[var(--color-accent)] group-hover:text-[var(--color-ink)]">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[var(--color-glass-border)] bg-[var(--color-glass)] text-[var(--color-fg-muted)] transition-all duration-300 group-hover:border-transparent group-hover:bg-[var(--color-accent)] group-hover:text-[var(--color-ink)] sm:h-12 sm:w-12">
             <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" />
           </span>
         </div>
@@ -63,10 +70,12 @@ export function ProjectNav({ prev, next }: { prev: Project; next: Project }) {
       <div className="mt-5 flex flex-col gap-3 text-sm sm:flex-row sm:items-center sm:justify-between">
         <Link
           href={`/projects/${prev.slug}`}
-          className="group inline-flex items-center gap-2 text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-fg)]"
+          className="group inline-flex min-w-0 items-center gap-2 py-1 text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-fg)]"
         >
-          <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
-          <span className="font-mono text-xs uppercase tracking-wider">Prev</span>
+          <ArrowLeft className="h-4 w-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-0.5" />
+          <span className="shrink-0 font-mono text-xs uppercase tracking-wider">
+            Prev
+          </span>
           <span className="truncate">{prev.title}</span>
         </Link>
 
