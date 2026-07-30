@@ -39,7 +39,7 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.18}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-fg-muted)] md:text-xl">
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--color-fg-muted)] md:text-lg">
               {profile.tagline}
             </p>
           </Reveal>
