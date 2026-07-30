@@ -14,6 +14,7 @@ export function Projects() {
         index="03"
         kicker="Selected work"
         title="What I've built"
+        className="mb-6 md:mb-8"
       />
 
       {/* Flagship case studies — a horizontal rail rather than a tall grid */}

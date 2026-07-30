@@ -111,10 +111,16 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={0.3}>
-            <div className="mt-4 flex items-center gap-2 pl-1 text-xs text-[var(--color-fg-faint)]">
+            <a
+              href={profile.education.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 pl-1 text-xs text-[var(--color-fg-faint)] transition-colors hover:text-[var(--color-fg)]"
+            >
               <MapPin className="h-3.5 w-3.5" />
               {profile.education.school} · Class of 2026
-            </div>
+              <ArrowUpRight className="h-3 w-3" />
+            </a>
           </Reveal>
         </div>
       </div>

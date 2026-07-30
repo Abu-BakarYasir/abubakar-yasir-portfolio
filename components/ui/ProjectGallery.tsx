@@ -94,10 +94,7 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
         }
       }}
     >
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <p className="font-mono text-xs text-[var(--color-fg-faint)]">
-          Drag, swipe or use the arrows
-        </p>
+      <div className="mb-4 flex items-center justify-end gap-4">
         {count > 1 && (
           <span className="font-mono text-[11px] text-[var(--color-fg-faint)]">
             {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}

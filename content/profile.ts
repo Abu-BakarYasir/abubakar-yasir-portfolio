@@ -37,6 +37,7 @@ export const profile = {
   education: {
     degree: "BS Computer Engineering",
     school: "COMSATS University Islamabad (CUI)",
+    url: "https://lahore.comsats.edu.pk/",
     period: "Sep 2022 - Jun 2026",
     detail: "CGPA 3.29 / 4.0 · Lahore, Pakistan",
   },

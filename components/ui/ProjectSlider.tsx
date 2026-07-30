@@ -133,10 +133,7 @@ export function ProjectSlider({ projects }: { projects: Project[] }) {
 
   return (
     <div {...holdProps}>
-      <div className="mb-5 flex items-center justify-between gap-4">
-        <p className="font-mono text-xs text-[var(--color-fg-faint)]">
-          Drag, swipe or use the arrows
-        </p>
+      <div className="mb-5 flex items-center justify-end gap-4">
         <div className="flex items-center gap-2">
           <ArrowButton
             label="Previous project"
