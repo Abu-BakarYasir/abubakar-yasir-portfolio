@@ -15,9 +15,9 @@ export const profile = {
 
   // Short About narrative.
   about: [
-    "I'm a full-stack and AI engineer at Spiral Lab in Lahore. Over the past year I've worked on three products that are now in front of real users: a public affairs platform for UK consultancies, a healthcare monitoring SaaS, and a medical RAG system for clinical questions.",
-    "What I actually like is owning a feature all the way down. The schema, the background jobs, the retrieval layer, the API, and then the screen it ends up on. Most of the AI work I've done falls apart in the seams between those layers, so being able to move across all of them turns out to be the useful part.",
-    "I'm finishing a computer engineering degree at COMSATS alongside this, graduating in mid 2026.",
+    "I'm a full-stack and AI engineer at Spiral Lab in Lahore. Over the past year I've shipped three products that are now in real users' hands: a public-affairs platform for UK consultancies, a healthcare-monitoring SaaS, and a medical assistant that answers clinical questions from source documents.",
+    "What I'm good at is owning a feature end to end — the database, the background jobs, the retrieval and API layers, and the screen it finally lands on. AI products tend to break in the seams between those layers, and being fluent across all of them is where I do my best work.",
+    "Alongside the work, I'm finishing a computer engineering degree at COMSATS, graduating mid-2026.",
   ],
 
   contact: {
