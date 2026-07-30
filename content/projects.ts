@@ -254,45 +254,53 @@ export const projects: Project[] = [
 ];
 
 // Secondary open-source repos shown as a compact grid (no full case study).
+// `title` is the human-friendly hook shown as the card heading; `name` is the
+// real repo slug, kept small as proof it's a live project.
 export const openSource = [
   {
     name: "slack-bounty-bot",
+    title: "Slack Bounty Bot",
     lang: "Python · Flask",
     summary:
-      "Scrapes Replit bounties through Firecrawl, keeps the high-value ones from the last 24 hours, and posts the best to Slack. Runs on Vercel on a CRON schedule.",
+      "Hunts the day's best-paying Replit bounties and drops them into Slack, on a schedule.",
     url: "https://github.com/Abu-BakarYasir/slack-bounty-bot",
   },
   {
     name: "Rag_App",
+    title: "Chat With Your PDFs",
     lang: "Python",
     summary:
-      "Ask questions about a PDF and get answers only from the document. ChromaDB for storage, HuggingFace embeddings, Groq LLaMA3-70B doing the writing.",
+      "Ask a document anything and get answers grounded only in its own pages.",
     url: "https://github.com/Abu-BakarYasir/Rag_App",
   },
   {
     name: "my_slack_mcp",
+    title: "Slack MCP Server",
     lang: "Python",
     summary:
-      "A Slack MCP server on FastMCP, exposing tools for recent messages, per-user history and LLM summaries. Published to Smithery.",
+      "Hands any LLM your Slack history and summaries as tools. Live on Smithery.",
     url: "https://smithery.ai/server/@Abu-BakarYasir/my_slack_mcp",
   },
   {
     name: "persistent_memory_chatbot",
+    title: "A Chatbot That Remembers",
     lang: "Python",
     summary:
-      "Groq llama3-8b wired to Mem0.ai so the chat remembers facts about you between sessions instead of starting cold every time.",
+      "Recalls you between sessions instead of starting cold every conversation.",
     url: "https://github.com/Abu-BakarYasir/persistent_memory_chatbot",
   },
   {
     name: "Pakistani-currency-classification",
+    title: "Banknote Classifier",
     lang: "Jupyter",
     summary: "A CNN that tells Pakistani banknotes apart by denomination.",
     url: "https://github.com/Abu-BakarYasir/Pakistani-currency-classification-project-using-CNN",
   },
   {
     name: "voice_assistant",
+    title: "Voice Assistant",
     lang: "Python",
-    summary: "Voice assistant experiment. Speech in, an LLM in the middle, a spoken answer out.",
+    summary: "Speak to it, an LLM thinks, and it talks back. Speech in, speech out.",
     url: "https://github.com/Abu-BakarYasir",
   },
 ];

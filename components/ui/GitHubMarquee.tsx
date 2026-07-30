@@ -34,20 +34,21 @@ export function GitHubMarquee() {
               rel="noopener noreferrer"
               aria-hidden={dupe || undefined}
               tabIndex={dupe ? -1 : undefined}
-              className="group mr-6 flex w-[clamp(320px,30vw,460px)] shrink-0 flex-col rounded-2xl border border-[var(--color-glass-border)] bg-[var(--color-glass)] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)] hover:bg-[var(--color-glass-strong)]"
+              className="group mr-6 flex min-h-[240px] w-[clamp(360px,33vw,540px)] shrink-0 flex-col rounded-2xl border border-[var(--color-glass-border)] bg-[var(--color-glass)] p-8 transition-all duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)] hover:bg-[var(--color-glass-strong)]"
             >
-              <div className="flex items-center justify-between gap-3">
-                <span className="font-mono text-base text-[var(--color-fg)]">
-                  {repo.name}
-                </span>
-                <ArrowUpRight className="h-5 w-5 shrink-0 text-[var(--color-fg-faint)] transition-colors group-hover:text-[var(--color-accent)]" />
+              <div className="flex items-start justify-between gap-3">
+                <h4 className="font-display text-xl font-semibold leading-snug text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)]">
+                  {repo.title}
+                </h4>
+                <ArrowUpRight className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-fg-faint)] transition-colors group-hover:text-[var(--color-accent)]" />
               </div>
-              <p className="mt-3 flex-1 text-[15px] leading-relaxed text-[var(--color-fg-muted)]">
+              <p className="mt-3 flex-1 text-base leading-relaxed text-[var(--color-fg-muted)]">
                 {repo.summary}
               </p>
-              <span className="mt-6 inline-block font-mono text-xs text-[var(--color-fg-faint)]">
-                {repo.lang}
-              </span>
+              <div className="mt-6 flex items-center justify-between gap-3 font-mono text-xs text-[var(--color-fg-faint)]">
+                <span className="truncate">{repo.name}</span>
+                <span className="shrink-0">{repo.lang}</span>
+              </div>
             </a>
           );
         })}

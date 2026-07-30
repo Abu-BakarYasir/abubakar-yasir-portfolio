@@ -24,7 +24,12 @@ export function Projects() {
       {/* Open-source repos — a continuously scrolling marquee */}
       <Reveal className="mt-20">
         <div className="mb-8 flex items-center gap-4">
-          <h3 className="font-display text-lg font-semibold">More on GitHub</h3>
+          <h3
+            className="font-display font-semibold"
+            style={{ fontSize: "var(--text-h3)" }}
+          >
+            More on GitHub
+          </h3>
           <span className="h-px flex-1 bg-[var(--color-glass-border)]" />
           <a
             href="https://github.com/Abu-BakarYasir"
