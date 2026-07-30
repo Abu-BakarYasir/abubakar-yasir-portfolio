@@ -43,7 +43,7 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
   const prev = useCallback(() => go(index - 1, -1), [go, index]);
   const next = useCallback(() => go(index + 1, 1), [go, index]);
 
-  const { running, holdProps, setHeld } = useAutoplay({
+  const { running, available, holdProps, setHeld } = useAutoplay({
     delay: AUTOPLAY_MS,
     resetKey: index,
     enabled: count > 1,
@@ -94,22 +94,36 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
         }
       }}
     >
-      <div className="mb-4 flex items-center justify-end gap-4">
+      <div className="mb-4 flex items-center justify-end gap-3">
         {count > 1 && (
-          <span className="font-mono text-[11px] text-[var(--color-fg-faint)]">
-            {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
-          </span>
+          <>
+            <span className="font-mono text-[11px] text-[var(--color-fg-faint)]">
+              {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+            </span>
+            {/* Phone-sized controls live here rather than over the artwork. On a
+                narrow screen the stage fills most of the viewport and the
+                overlay arrows sat on top of the screenshot being examined. */}
+            <div className="flex items-center gap-1 md:hidden">
+              <BarButton label="Previous image" onClick={prev}>
+                <ChevronLeft className="h-5 w-5" />
+              </BarButton>
+              <BarButton label="Next image" onClick={next}>
+                <ChevronRight className="h-5 w-5" />
+              </BarButton>
+            </div>
+          </>
         )}
       </div>
 
       {/* Stage */}
       <div className="glass relative overflow-hidden rounded-2xl p-1.5">
+        {/* Heights are classes rather than inline style so they can respond:
+            78vh on a phone left the stage filling the screen with no page
+            context around it, and letterboxed tall captures besides. */}
         <div
-          className="relative mx-auto w-full overflow-hidden rounded-xl bg-[color-mix(in_oklab,var(--color-fg)_4%,transparent)]"
+          className="relative mx-auto max-h-[58vh] min-h-[200px] w-full overflow-hidden rounded-xl bg-[color-mix(in_oklab,var(--color-fg)_4%,transparent)] sm:max-h-[70vh] sm:min-h-[260px] md:max-h-[78vh]"
           style={{
             aspectRatio: ratio,
-            maxHeight: "78vh",
-            minHeight: "260px",
             transition: "aspect-ratio 420ms var(--ease-out-expo)",
           }}
         >
@@ -151,17 +165,21 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
               <Arrow side="left" onClick={prev} />
               <Arrow side="right" onClick={next} />
               {/* Autoplay countdown, hairline across the bottom of the stage.
-                  Remounts with each slide, which restarts the fill. */}
-              <span
-                key={index}
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] overflow-hidden"
-              >
+                  Remounts with each slide, which restarts the fill. Omitted
+                  entirely where autoplay never runs (touch, reduced motion) —
+                  a bar that stays empty forever just looks broken. */}
+              {available && (
                 <span
-                  className="autoplay-fill block h-full bg-[var(--color-accent)]"
-                  style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
-                  data-paused={!running}
-                />
-              </span>
+                  key={index}
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] overflow-hidden"
+                >
+                  <span
+                    className="autoplay-fill block h-full bg-[var(--color-accent)]"
+                    style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
+                    data-paused={!running}
+                  />
+                </span>
+              )}
             </>
           )}
         </div>
@@ -220,7 +238,9 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
           changes. Sits under the thumbnails as a second, glanceable read of
           how far through the set you are. */}
       {count > 1 && (
-        <div className="mt-4 flex items-center justify-center gap-2">
+        // Wider gap on phones so the 44px hit areas behind these 6px marks
+        // don't overlap each other.
+        <div className="mt-4 flex items-center justify-center gap-4 sm:gap-2">
           {images.map((_, i) =>
             i === index ? (
               <span
@@ -228,11 +248,15 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
                 aria-hidden
                 className="relative block h-1.5 w-8 overflow-hidden rounded-full bg-[var(--color-glass-border)]"
               >
-                <span
-                  className="autoplay-fill absolute inset-0 rounded-full bg-[var(--color-accent)]"
-                  style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
-                  data-paused={!running}
-                />
+                {available ? (
+                  <span
+                    className="autoplay-fill absolute inset-0 rounded-full bg-[var(--color-accent)]"
+                    style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
+                    data-paused={!running}
+                  />
+                ) : (
+                  <span className="absolute inset-0 rounded-full bg-[var(--color-accent)]" />
+                )}
               </span>
             ) : (
               <button
@@ -240,13 +264,35 @@ export function ProjectGallery({ images }: { images: ProjectImage[] }) {
                 type="button"
                 onClick={() => go(i, i > index ? 1 : -1)}
                 aria-label={`Go to image ${i + 1} of ${count}`}
-                className="h-1.5 w-1.5 rounded-full bg-[var(--color-glass-border)] transition-all duration-300 hover:bg-[var(--color-fg-faint)]"
+                className="hit-target relative h-1.5 w-1.5 rounded-full bg-[var(--color-glass-border)] transition-all duration-300 hover:bg-[var(--color-fg-faint)]"
               />
             ),
           )}
         </div>
       )}
     </div>
+  );
+}
+
+/** Phone-sized gallery control, sitting in the bar above the stage. */
+function BarButton({
+  label,
+  onClick,
+  children,
+}: {
+  label: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className="grid h-11 w-11 place-items-center rounded-full border border-[var(--color-glass-border)] bg-[var(--color-glass)] text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-fg)]"
+    >
+      {children}
+    </button>
   );
 }
 
@@ -258,12 +304,13 @@ function Arrow({ side, onClick }: { side: "left" | "right"; onClick: () => void 
       onClick={onClick}
       aria-label={side === "left" ? "Previous image" : "Next image"}
       className={cn(
-        "absolute top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full",
+        "absolute top-1/2 z-10 h-10 w-10 -translate-y-1/2 place-items-center rounded-full",
         "border border-[var(--color-glass-border)] bg-[color-mix(in_oklab,var(--color-bg)_70%,transparent)]",
         "text-[var(--color-fg-muted)] backdrop-blur-md transition-all duration-300",
         "hover:border-[color-mix(in_oklab,var(--color-accent)_50%,transparent)] hover:text-[var(--color-fg)]",
-        // Stay visible on touch, fade in on pointer devices.
-        "opacity-100 md:opacity-0 md:group-hover/gallery:opacity-100 md:focus-visible:opacity-100",
+        // Pointer devices only — phones get the pair in the bar above the
+        // stage instead, so nothing covers the screenshot.
+        "hidden md:grid md:opacity-0 md:group-hover/gallery:opacity-100 md:focus-visible:opacity-100",
         side === "left" ? "left-3" : "right-3",
       )}
     >

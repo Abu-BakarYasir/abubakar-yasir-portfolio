@@ -8,8 +8,11 @@ import { useAutoplay } from "@/lib/useAutoplay";
 import { cn } from "@/lib/utils";
 
 /** How long a card sits before the rail moves on. Long enough to read a title
- *  and a stack list, short enough that the rail reads as alive. */
-const AUTOPLAY_MS = 3000;
+ *  and a stack list, short enough that the rail reads as alive.
+ *  Was 3000, which is fine when several cards share the screen and hovering
+ *  holds it, but on narrower viewports one card fills the rail and three
+ *  seconds is less time than it takes to read the tagline and the stack. */
+const AUTOPLAY_MS = 5500;
 
 /**
  * Horizontal case-study rail.
@@ -76,7 +79,7 @@ export function ProjectSlider({ projects }: { projects: Project[] }) {
 
   // Wraps at the end rather than stopping, so the rail keeps cycling for
   // anyone who leaves it alone. The arrows stay one-directional and disable.
-  const { running, holdProps } = useAutoplay({
+  const { running, available, holdProps } = useAutoplay({
     delay: AUTOPLAY_MS,
     resetKey: active,
     enabled: pages > 1 && !dragging,
@@ -186,7 +189,10 @@ export function ProjectSlider({ projects }: { projects: Project[] }) {
       </div>
 
       {pages > 1 && (
-        <div className="mt-6 flex items-center justify-center gap-2">
+        // gap-2 between 6px marks meant ~8px of tappable width per dot. The
+        // marks keep their size; `.hit-target` grows the touch area to 44px
+        // behind them, and the row gap widens so those areas don't overlap.
+        <div className="mt-6 flex items-center justify-center gap-4 sm:gap-2">
           {Array.from({ length: pages }, (_, i) =>
             i === active ? (
               // The active dot doubles as the autoplay countdown. It is only
@@ -196,11 +202,18 @@ export function ProjectSlider({ projects }: { projects: Project[] }) {
                 aria-current
                 className="relative block h-1.5 w-8 overflow-hidden rounded-full bg-[var(--color-glass-border)]"
               >
-                <span
-                  className="autoplay-fill absolute inset-0 rounded-full bg-[var(--color-accent)]"
-                  style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
-                  data-paused={!running}
-                />
+                {available ? (
+                  <span
+                    className="autoplay-fill absolute inset-0 rounded-full bg-[var(--color-accent)]"
+                    style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
+                    data-paused={!running}
+                  />
+                ) : (
+                  // No autoplay on this device, so a countdown track that can
+                  // never fill would just look like a stuck control. The active
+                  // pill reads as solid instead.
+                  <span className="absolute inset-0 rounded-full bg-[var(--color-accent)]" />
+                )}
               </span>
             ) : (
               <button
@@ -208,7 +221,7 @@ export function ProjectSlider({ projects }: { projects: Project[] }) {
                 type="button"
                 onClick={() => goTo(i)}
                 aria-label={`Go to slide ${i + 1} of ${pages}`}
-                className="h-1.5 w-1.5 rounded-full bg-[var(--color-glass-border)] transition-all duration-300 hover:bg-[var(--color-fg-faint)]"
+                className="hit-target relative h-1.5 w-1.5 rounded-full bg-[var(--color-glass-border)] transition-all duration-300 hover:bg-[var(--color-fg-faint)]"
               />
             ),
           )}
@@ -235,7 +248,7 @@ function ArrowButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-glass-border)] bg-[var(--color-glass)] text-[var(--color-fg-muted)] transition-all duration-300 hover:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)] hover:text-[var(--color-accent)] disabled:pointer-events-none disabled:opacity-30"
+      className="grid h-11 w-11 place-items-center rounded-full border border-[var(--color-glass-border)] bg-[var(--color-glass)] text-[var(--color-fg-muted)] transition-all duration-300 hover:border-[color-mix(in_oklab,var(--color-accent)_45%,transparent)] hover:text-[var(--color-accent)] disabled:pointer-events-none disabled:opacity-30 sm:h-9 sm:w-9"
     >
       {children}
     </button>

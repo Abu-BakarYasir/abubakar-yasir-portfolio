@@ -12,12 +12,19 @@ export function ProjectCard({ project }: { project: Project }) {
     >
       <ProjectMedia project={project} />
 
-      <div className="flex flex-1 flex-col p-6">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="font-display text-xl font-semibold">{project.title}</h3>
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-2 sm:items-center sm:gap-3">
+          <h3
+            className="min-w-0 font-display font-semibold"
+            style={{ fontSize: "var(--text-h4)" }}
+          >
+            {project.title}
+          </h3>
           <StatusBadge status={project.status} />
         </div>
-        <p className="mt-1.5 text-[var(--color-fg-muted)]">{project.tagline}</p>
+        <p className="mt-1.5 text-sm text-[var(--color-fg-muted)] sm:text-base">
+          {project.tagline}
+        </p>
 
         <div className="mt-4 flex flex-wrap gap-1.5">
           {project.stack.slice(0, 5).map((s) => (
@@ -47,14 +54,16 @@ export function ProjectCard({ project }: { project: Project }) {
             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
           {/* Raised above the overlay so these stay independently clickable. */}
-          <span className="relative z-10 ml-auto flex items-center gap-1">
+          {/* gap-3 on phones so the two 44px hit areas sit edge to edge rather
+              than overlapping, which would make the left icon partly un-tappable. */}
+          <span className="relative z-10 ml-auto flex items-center gap-3 sm:gap-1">
             {project.liveUrl && (
               <a
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${project.title} live site`}
-                className="grid h-8 w-8 place-items-center rounded-full text-[var(--color-fg-muted)] transition-colors hover:bg-[var(--color-glass-strong)] hover:text-[var(--color-fg)]"
+                className="hit-target relative grid h-8 w-8 place-items-center rounded-full text-[var(--color-fg-muted)] transition-colors hover:bg-[var(--color-glass-strong)] hover:text-[var(--color-fg)]"
               >
                 <ExternalLink className="h-4 w-4" />
               </a>
@@ -65,7 +74,7 @@ export function ProjectCard({ project }: { project: Project }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${project.title} repository`}
-                className="grid h-8 w-8 place-items-center rounded-full text-[var(--color-fg-muted)] transition-colors hover:bg-[var(--color-glass-strong)] hover:text-[var(--color-fg)]"
+                className="hit-target relative grid h-8 w-8 place-items-center rounded-full text-[var(--color-fg-muted)] transition-colors hover:bg-[var(--color-glass-strong)] hover:text-[var(--color-fg)]"
               >
                 <Github className="h-4 w-4" />
               </a>
