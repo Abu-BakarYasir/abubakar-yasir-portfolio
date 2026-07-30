@@ -19,7 +19,7 @@ export function About() {
         <div className="lg:col-span-7">
           {profile.about.map((para, i) => (
             <Reveal key={i} delay={i * 0.08}>
-              <p className="mb-5 text-lg leading-relaxed text-[var(--color-fg-muted)]">
+              <p className="mb-5 text-base leading-relaxed text-[var(--color-fg-muted)]">
                 {para}
               </p>
             </Reveal>
