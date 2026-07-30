@@ -485,6 +485,45 @@ body {
   }
 }
 
+/* ============================================================
+   GitHub repo marquee — a continuous conveyor rather than a static grid.
+   The track holds two identical passes of the repo list; a linear
+   translateX from 0 to -50% lands pass 2 exactly where pass 1 began, so
+   the loop is seamless. Spacing lives on each slide's right margin (not a
+   flex gap) so every slide is one uniform unit and -50% never drifts.
+   ============================================================ */
+.gh-marquee {
+  overflow: hidden;
+}
+.gh-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: gh-marquee var(--gh-marquee-duration, 46s) linear infinite;
+}
+/* Pause on hover or keyboard focus so a card can actually be clicked. */
+.gh-marquee:hover .gh-marquee-track,
+.gh-marquee:focus-within .gh-marquee-track {
+  animation-play-state: paused;
+}
+@keyframes gh-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+/* No motion: drop the animation and let the row be scrolled by hand instead,
+   so the repos hidden off-screen stay reachable. */
+@media (prefers-reduced-motion: reduce) {
+  .gh-marquee {
+    overflow-x: auto;
+  }
+  .gh-marquee-track {
+    animation: none;
+  }
+}
+
 /* Mouse-drag scrolling on the project rail. Touch and trackpad already scroll
    natively; this only adds the click-and-drag that a mouse otherwise lacks. */
 .rail-dragging {
