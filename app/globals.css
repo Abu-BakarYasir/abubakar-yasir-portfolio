@@ -594,26 +594,32 @@ body {
 }
 
 /* ============================================================
-   GitHub repo marquee — a continuous conveyor rather than a static grid.
-   The track holds two identical passes of the repo list; a linear
-   translateX from 0 to -50% lands pass 2 exactly where pass 1 began, so
-   the loop is seamless. Spacing lives on each slide's right margin (not a
-   flex gap) so every slide is one uniform unit and -50% never drifts.
+   Marquee — a continuous conveyor rather than a static grid. Shared by the
+   repo strip and, on phones, the skills strip.
+
+   The track holds two identical passes of the list; a linear translateX from
+   0 to -50% lands pass 2 exactly where pass 1 began, so the loop is seamless.
+   Spacing lives on each slide's right margin (not a flex gap) so every slide
+   is one uniform unit and -50% never drifts.
+
+   Pausing has two routes. Hover and focus-within cover pointer devices; touch
+   has neither, so <Marquee> drives `data-paused` from pointer events as well.
+   See the component for why that pause lingers after the finger lifts.
    ============================================================ */
-.gh-marquee {
+.marquee {
   overflow: hidden;
 }
-.gh-marquee-track {
+.marquee-track {
   display: flex;
   width: max-content;
-  animation: gh-marquee var(--gh-marquee-duration, 46s) linear infinite;
+  animation: marquee var(--marquee-duration, 46s) linear infinite;
 }
-/* Pause on hover or keyboard focus so a card can actually be clicked. */
-.gh-marquee:hover .gh-marquee-track,
-.gh-marquee:focus-within .gh-marquee-track {
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track,
+.marquee[data-paused="true"] .marquee-track {
   animation-play-state: paused;
 }
-@keyframes gh-marquee {
+@keyframes marquee {
   from {
     transform: translateX(0);
   }
@@ -621,14 +627,10 @@ body {
     transform: translateX(-50%);
   }
 }
-/* Drop the animation and let the row be scrolled by hand instead, so the repos
-   hidden off-screen stay reachable.
-   `(hover: none)` is in here alongside reduced-motion because the pause rule
-   above is hover/focus-driven, and a touch device can satisfy neither: the
-   strip would slide forever, so a repo card could never be finished reading and
-   every tap target would be moving under the finger. */
-@media (prefers-reduced-motion: reduce), (hover: none) {
-  .gh-marquee {
+/* No motion: drop the animation and let the row be scrolled by hand instead,
+   so the slides hidden off-screen stay reachable. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
     overflow-x: auto;
     scroll-snap-type: x proximity;
     /* Cancels the -mx-6 bleed the animated version relies on, so in scroll mode
@@ -636,15 +638,15 @@ body {
     padding-inline: 1.5rem;
     scroll-padding-left: 1.5rem;
   }
-  .gh-marquee-track {
+  .marquee-track {
     animation: none;
   }
-  .gh-marquee-item {
+  .marquee-item {
     scroll-snap-align: start;
   }
   /* The second pass exists only to hide the loop seam. With no loop running it
-     is just every repo listed a second time. */
-  .gh-marquee-dupe {
+     is just every slide listed a second time. */
+  .marquee-dupe {
     display: none;
   }
 }
