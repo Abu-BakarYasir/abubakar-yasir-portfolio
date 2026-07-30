@@ -597,55 +597,40 @@ body {
    Marquee — a continuous conveyor rather than a static grid. Shared by the
    repo strip and, on phones, the skills strip.
 
-   The track holds two identical passes of the list; a linear translateX from
-   0 to -50% lands pass 2 exactly where pass 1 began, so the loop is seamless.
-   Spacing lives on each slide's right margin (not a flex gap) so every slide
-   is one uniform unit and -50% never drifts.
+   The track holds two identical passes of the list, and the strip is driven by
+   scrollLeft rather than a transform. That is the whole point: a translateX
+   animation needs `overflow: hidden`, which leaves nothing to scroll, so the
+   strip auto-rotates but cannot be swiped. Scrolling a real scroll container
+   puts the drift and the reader's finger on the same axis — native touch
+   swipe, momentum and trackpad all work, and the auto-advance just nudges the
+   same property. See <Marquee> for the loop and pause logic.
 
-   Pausing has two routes. Hover and focus-within cover pointer devices; touch
-   has neither, so <Marquee> drives `data-paused` from pointer events as well.
-   See the component for why that pause lingers after the finger lifts.
+   Spacing lives on each slide's right margin (not a flex gap) so every slide
+   is one uniform unit and the half-width wrap never drifts.
    ============================================================ */
 .marquee {
-  overflow: hidden;
+  overflow-x: auto;
+  /* A horizontal swipe here must not turn into browser back-navigation. */
+  overscroll-behavior-x: contain;
 }
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee var(--marquee-duration, 46s) linear infinite;
 }
-.marquee:hover .marquee-track,
-.marquee:focus-within .marquee-track,
-.marquee[data-paused="true"] .marquee-track {
-  animation-play-state: paused;
-}
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-/* No motion: drop the animation and let the row be scrolled by hand instead,
-   so the slides hidden off-screen stay reachable. */
+/* No motion: the component leaves the strip alone, so it is simply a rail the
+   reader scrolls by hand. The duplicate pass exists only to hide the seam of a
+   loop that is no longer running, so it comes off. */
 @media (prefers-reduced-motion: reduce) {
   .marquee {
-    overflow-x: auto;
     scroll-snap-type: x proximity;
-    /* Cancels the -mx-6 bleed the animated version relies on, so in scroll mode
-       the first card lines up with the section's own gutter. */
+    /* Cancels the -mx-6 bleed, so the first card lines up with the section's
+       own gutter. */
     padding-inline: 1.5rem;
     scroll-padding-left: 1.5rem;
-  }
-  .marquee-track {
-    animation: none;
   }
   .marquee-item {
     scroll-snap-align: start;
   }
-  /* The second pass exists only to hide the loop seam. With no loop running it
-     is just every slide listed a second time. */
   .marquee-dupe {
     display: none;
   }
