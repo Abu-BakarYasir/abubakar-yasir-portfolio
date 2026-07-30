@@ -7,7 +7,7 @@ export const profile = {
   // Hero headline. Written to say something specific about the work rather
   // than the usual "passionate developer" filler.
   tagline:
-    "I build AI products from the database up to the screen people actually click. Right now that means RAG systems and multi-agent tooling at Spiral Lab.",
+    "I build AI products from the database all the way up to the screen people actually use. Right now that means RAG systems and multi-agent tooling at Spiral Lab.",
   location: "Lahore, Pakistan",
   timezone: "PKT · UTC+5",
   availability: "Open to remote work, anywhere",
@@ -16,8 +16,8 @@ export const profile = {
   // Short About narrative.
   about: [
     "I'm a full-stack and AI engineer at Spiral Lab in Lahore. Over the past year I've shipped three products that are now in real users' hands: a public-affairs platform for UK consultancies, a healthcare-monitoring SaaS, and a medical assistant that answers clinical questions from source documents.",
-    "What I'm good at is owning a feature end to end — the database, the background jobs, the retrieval and API layers, and the screen it finally lands on. AI products tend to break in the seams between those layers, and being fluent across all of them is where I do my best work.",
-    "Alongside the work, I'm finishing a computer engineering degree at COMSATS, graduating mid-2026.",
+    "What I'm good at is owning a feature end to end: the database, the background jobs, the retrieval and API layers, and the screen it finally lands on. AI products tend to break in the seams between those layers, and being fluent across all of them is where I do my best work.",
+    "I recently graduated from COMSATS with a degree in computer engineering, which I built alongside this work.",
   ],
 
   contact: {
@@ -49,9 +49,9 @@ export const experience = [
     period: "Apr 2025 - Present",
     link: "https://www.linkedin.com/company/spiral-lab1/posts/?feedView=all",
     points: [
-      "Worked across three products at the same time, owning the backend, the AI layer, the async pipelines and the frontend on each one. Mostly Next.js, FastAPI, Django, Node.js and Postgres via Supabase.",
-      "Built the AI side: retrieval pipelines and multi-agent orchestration on OpenAI, Claude and Groq, with Qdrant and ChromaDB handling vector search.",
-      "Did the load-bearing unglamorous parts too. JWT auth, role-based access, row-level security, rate limiting, audit logging, and background queues on Django-Q2 and Redis, deployed to Railway and Vercel with auto-deploy on push.",
+      "Shipped three products at once, owning the backend, AI layer, async pipelines and frontend on each. Mostly Next.js, FastAPI, Django, Node.js and Postgres on Supabase.",
+      "Built the AI layer: retrieval pipelines and multi-agent orchestration across OpenAI, Claude and Groq, with Qdrant and ChromaDB for vector search.",
+      "Owned the unglamorous but load-bearing parts too: JWT auth, role-based access, row-level security, rate limiting, audit logging and background queues on Django-Q2 and Redis, all auto-deployed to Railway and Vercel.",
     ],
   },
 ] as const;
